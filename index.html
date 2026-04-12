@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoFlight Investor Wiki</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .auth-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .auth-modal {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .auth-modal h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+        .auth-modal p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .error {
+            color: #d32f2f;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+        .wiki-screen {
+            display: none;
+            background: white;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: white;
+            min-height: 100vh;
+        }
+        h1 { font-size: 2.5em; margin: 40px 0 20px; color: #1a1a1a; border-bottom: 3px solid #0066cc; padding-bottom: 10px; }
+        h2 { font-size: 2em; margin: 30px 0 15px; color: #1a1a1a; }
+        h3 { font-size: 1.5em; margin: 20px 0 10px; color: #333; }
+        h4 { font-size: 1.2em; margin: 15px 0 8px; color: #555; }
+        p { margin: 15px 0; }
+        ul { margin: 15px 0 15px 30px; }
+        li { margin: 8px 0; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9em; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        blockquote { border-left: 4px solid #0066cc; padding-left: 15px; margin: 20px 0; color: #666; font-style: italic; }
+        strong { color: #1a1a1a; font-weight: 600; }
+        em { font-style: italic; }
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        hr { border: none; border-top: 2px solid #ddd; margin: 40px 0; }
+        .auth-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logout-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .logout-btn:hover {
+            background: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-modal">
+            <h1>GoFlight Investor Wiki</h1>
+            <p>Enter your access code to view</p>
+            <input type="password" id="accessCode" placeholder="Access code" autocomplete="off">
+            <button onclick="checkAccess()">Access</button>
+            <div class="error" id="error">Invalid access code</div>
+        </div>
+    </div>
+
+    <div class="wiki-screen" id="wikiScreen">
+        <div class="auth-banner">
+            <span><strong>Investor Access.</strong> Confidential document.</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <div class="container">
+            <h1>GoFlight Company Wiki</h1>
+<table>
+<tr></tr>
+<p><strong>Purpose:</strong> Investor-ready knowledge base, pitch deck source, operational reference</p>
+</table>
+<hr>
+<h2>Executive Summary</h2>
+<p><strong>GoFlight</strong> is an AI-native private aviation marketplace connecting charter passengers and cargo shippers directly with Part 135 operators. Built by <strong>Strukt & Proto, Inc.</strong> (Delaware C-Corp, incorporated March 2026 via Stripe Atlas), the platform replaces traditional brokers with a conversational AI called <strong>Wingman</strong>. Stage: <strong>pre-revenue, product complete, seeking first operator</strong>. Primary goal: sign 10 active operators and complete 3 real bookings by June 2026. Founder: <strong>Jack Bradham</strong>, Davidson, NC.</p>
+<hr>
+<h2>Timeline</h2>
+<table>
+<tr><td>Date</td><td>Milestone</td></tr>
+<tr><td>**Mid-2025**</td><td>Initial GoFlight development begins (AWS infrastructure, early Lambda functions)</td></tr>
+<tr><td>**2026-02-03**</td><td>Asana project created; formal launch planning begins</td></tr>
+<tr><td>**2026-02-15**</td><td>Velma (AI PA) onboarded. First code audit: **3/10** readiness. Revised to **7.8/10** after full AWS infrastructure audit revealed 42 backend endpoints, 37 dev users, 14 trips, 21 bids already in DynamoDB</td></tr>
+<tr><td>**2026-02-17**</td><td>Aaron Fiser hired as domain consultant ($1K/month, 8-10 hrs/week). Spec interview: cancellation policy, payment flow, Wingman scope, empty legs, trip tracking decisions locked</td></tr>
+<tr><td>**2026-02-21**</td><td>Brand name **GoFlight** confirmed. goflight.io domain secured</td></tr>
+<tr><td>**2026-02-23**</td><td>Entity discussions begin (FL LLC vs WY C-Corp vs DE C-Corp)</td></tr>
+<tr><td>**2026-02-24**</td><td>Massive infrastructure day: 6 CDK stacks, 19 API endpoints wired, docs.goflight.io live, Stripe test keys, SES email</td></tr>
+<tr><td>**2026-02-26**</td><td>Twilio shut down (A2P registration failed). Telnyx SMS started. **EIN received: 41-4338471**. Mercury banking opened. Adam Hensley's first PRs merged</td></tr>
+<tr><td>**2026-03-01**</td><td>Omnichannel Wingman built: SMS, WhatsApp, Telegram, Voice. ElevenLabs phone line live (+1 305-363-1121)</td></tr>
+<tr><td>**2026-03-03**</td><td>**Stripe Atlas filed → Delaware C-Corp (Strukt & Proto, Inc.)**. DAFT Dutch residency approved (Jan 2026–Jan 2028). Agent team ("The Nerds") created</td></tr>
+<tr><td>**2026-03-05**</td><td>Largest single-day sprint. All CRITICAL/HIGH security issues fixed. Stripe live keys wired. Operator onboarding wizard built. Task board deployed</td></tr>
+<tr><td>**2026-03-08**</td><td>Application gap audit: 22 stacks NOT in prod. Sprint 2 dispatched</td></tr>
+<tr><td>**2026-03-10**</td><td>**Soft launch target date.** Platform technically live on prod. No operators invited. No announcement made</td></tr>
+<tr><td>**2026-03-11–16**</td><td>Jack in Amsterdam (DAFT biometrics). Dev continued autonomously. Two P0 prod failures discovered on return: Cognito pointing to staging Lambda; Stripe webhook secret missing in prod</td></tr>
+<tr><td>**2026-03-17–18**</td><td>Moses agent broken. OpenClaw reinstalled. Moses replaced with Aaron (agent). 10 crons found running invalid Gemini model</td></tr>
+<tr><td>**2026-03-19**</td><td>**Aaron Fiser (human) fired.** ~$1,250 spent for minimal output (one domain Q&A email in 5 weeks)</td></tr>
+<tr><td>**2026-03-20**</td><td>**Dev Factory rebuilt.** 19 features shipped overnight autonomously. "State of GoFlight" written: 38 microservices, 35 CI/CD pipelines, 1,475 tests, 354 commits in March</td></tr>
+<tr><td>**2026-03-21**</td><td>Adam Hensley going quiet — Jack decides to part ways. Gremlin QA bot deployed</td></tr>
+<tr><td>**2026-03-22**</td><td>**Business Review written** (the honest one). 252 tasks total. Verdict: "world-class infrastructure, zero commercial traction"</td></tr>
+<tr><td>**2026-03-24–26**</td><td>**NBAA SDC Cleveland attended.** Intel gathered on Hamilton AI ($10M raised), Tivoli (~4K operators, AI pricing engine launching May 2026), FBO landscape</td></tr>
+<tr><td>**2026-03-29**</td><td>Jack turns 47. All `.io` references purged from specs (125 files, 477 substitutions). **goflight.ai** becomes the primary domain. goflight.io → .ai 301 redirect live</td></tr>
+<tr><td>**2026-03-31**</td><td>Soft launch window passes. No commercial traction</td></tr>
+<tr><td>**2026-04-04**</td><td>Dev pipeline v2 archived. DynamoDB task board (`goflight-tasks`) becomes single source of truth</td></tr>
+<tr><td>**2026-04-07**</td><td>All agent crons migrated to **ollama/gemma4** (local, free). Zero Anthropic spend on crons. Pipeline marked DOWN. Feature freeze in effect</td></tr>
+<tr><td>**2026-04-08**</td><td>velma@goflight.ai M365 account created. Context pruning enabled (2-hour window)</td></tr>
+<tr><td>**2026-04-10**</td><td>Mercury business account set up. Business dev call with Jade Mercury scheduled Apr 14</td></tr>
+</table>
+<hr>
+<h2>Mission & Strategy</h2>
+<h3>Positioning</h3>
+<p><strong>"Tell us what you need. We handle the rest."</strong></p>
+<p>GoFlight is positioned as the <strong>hospitality-first</strong> alternative to traditional brokers and legacy platforms. The gap in private aviation isn't technology — it's <strong>hospitality</strong>. Every competitor treats customers as transactions; GoFlight treats them as guests.</p>
+<h3>Brand Direction (locked March 22, 2026)</h3>
+<ul>
+<li>**Bauhaus visual aesthetic** with warm, human copy</li>
+<li>Wingman is a **character** (warm, confident, slightly cheeky) — not a chatbot widget</li>
+<li>Never lead with "AI-powered" — AI is how it works, not why you use it</li>
+<li>Two audiences served equally: **passengers** ("just say where you're going") and **operators** ("get booked directly, 3% flat")</li>
+<li>**Voice:** Direct, punchy, human. Confident but not arrogant. Short sentences, no jargon</li>
+</ul>
+<h3>Go-to-Market</h3>
+<ul>
+<li>**Operator-first strategy.** Win supply before chasing demand</li>
+<li>**US-only for first 18 months.** International scope deferred</li>
+<li>**Mid-market focus:** $15K–$40K bookings, underserved by luxury brokers</li>
+<li>**Target operator:** Part 135, 3–15 aircraft, domestic + Caribbean/Mexico, struggling with utilisation</li>
+<li>**Target customer:** Books 2–6 charters/year, $15K–$45K average trip, digitally comfortable, ages 35–55</li>
+</ul>
+<h3>Key Strategic Insight (from March 2026 overnight analysis)</h3>
+<blockquote>"GoFlight's AI Wingman is more valuable as **industry infrastructure** than as a marketplace feature."</blockquote>
+<p>The recommended pivot: become the <strong>operating system for private charter</strong> — selling AI tools to operators (white-label AI, CRM, utilisation optimisation, pricing intelligence) while building a marketplace as secondary revenue. This increases probability of success from ~15% to ~30-40%. <strong>Jack has not yet acted on this recommendation as of April 10.</strong></p>
+<hr>
+<h2>Business Model</h2>
+<h3>Revenue</h3>
+<ul>
+<li>**3% flat transaction fee** on every booking (earned at booking, retained even if cancelled)</li>
+<li>No hidden fees, no membership</li>
+<li>Average booking: **$35,000** (blended, weighted toward light/mid-size jets)</li>
+<li>Revenue per booking: **$1,050**</li>
+</ul>
+<h3>Payment Flow</h3>
+<ul>
+<li>Customer pays at booking (full amount or deposit)</li>
+<li>Funds held in **escrow** (GoFlight is payment facilitator, not guarantor)</li>
+<li>Operators paid **after services delivered** (24-72 hour hold post-delivery)</li>
+<li>Operator sets cancellation terms (from GoFlight's predefined framework/tiers)</li>
+</ul>
+<h3>Critical Economics Problem</h3>
+<p><strong>Payment processing at 2.5% eats 83% of the 3% take rate</strong> on credit card transactions.</p>
+<ul>
+<li>On a $35K booking: $1,050 revenue − $875 processing = **$175 net**</li>
+<li>**Mitigation:** ACH/wire for transactions >$10K ($5-15 flat fee). With ACH, gross margin rises to ~63-70%</li>
+<li>Break-even requires ~**50 bookings/month** (~$20M GMV/year)</li>
+<li>**This is unsolved as of April 10.** No ACH integration built</li>
+</ul>
+<h3>Revenue Projections (from strategic analysis)</h3>
+<table>
+<tr><td>Scenario</td><td>Monthly Bookings</td><td>Monthly Revenue</td><td>Annual Revenue</td></tr>
+<tr><td>Trickle (Mo 1-6)</td><td>5</td><td>$5,250</td><td>$63K</td></tr>
+<tr><td>Early Traction (Mo 6-12)</td><td>20</td><td>$21,000</td><td>$252K</td></tr>
+<tr><td>Growth (Year 2)</td><td>80</td><td>$84,000</td><td>$1.0M</td></tr>
+<tr><td>Scale (Year 3)</td><td>250</td><td>$262,500</td><td>$3.15M</td></tr>
+</table>
+<h3>Burn Rate (as of April 2026)</h3>
+<p><strong>Known monthly costs:</strong></p>
+<table>
+<tr><td>Item</td><td>Monthly Cost</td></tr>
+<tr><td>AWS (CodeBuild, CodePipeline, Bedrock, misc)</td><td>~$350+</td></tr>
+<tr><td>GitHub Team</td><td>$8</td></tr>
+<tr><td>Microsoft 365 Business Standard</td><td>$30</td></tr>
+<tr><td>Hetzner server (OpenClaw host, CPX31 16GB)</td><td>TBD</td></tr>
+<tr><td>Anthropic API (now pay-as-you-go, crons on Gemma4)</td><td>Reduced, TBD</td></tr>
+<tr><td>ElevenLabs (voice)</td><td>TBD</td></tr>
+<tr><td>OpenClaw</td><td>TBD</td></tr>
+</table>
+<p><strong>Conservative floor:</strong> $600-800/month</p>
+<p><strong>Likely actual:</strong> $800-1,200/month (reduced from $1,200-1,800 after Gemma4 migration)</p>
+<p><strong>One-time costs incurred:</strong></p>
+<ul>
+<li>Stripe Atlas (DE C-Corp): $500</li>
+<li>Aaron Fiser consulting (~5 weeks): ~$1,250</li>
+<li>Telnyx SMS funding: $100</li>
+<li>goflight.ai domain: $1,800 (GoDaddy brokered)</li>
+</ul>
+<p><strong>Revenue to date: $0.</strong> No paying customers. No completed bookings.</p>
+<hr>
+<h2>Product</h2>
+<h3>What It Is</h3>
+<p>A <strong>two-sided marketplace</strong> for private aviation (passenger charter + cargo) with an AI-powered conversational interface (<strong>Wingman</strong>) as the primary interaction layer.</p>
+<h3>Key Features (built, deployed)</h3>
+<ul>
+<li>**Wingman AI** — Conversational interface for trip creation, bid comparison, status checks. Accessible to passengers, operators, and admins (role-scoped). Integrated into trip timeline</li>
+<li>**Trip lifecycle** — Create → bid → compare → book → pay → track → review</li>
+<li>**Operator dashboard** — Fleet management, earnings, capacity listings, empty legs</li>
+<li>**Bid system** — Operators bid on trip requests; passengers compare and accept. Quick-bid and detailed-bid modes</li>
+<li>**Payment** — Full Stripe integration (checkout, escrow, webhooks, refunds). Live keys wired</li>
+<li>**Empty legs / available capacity** — List, detail, post. Operators publish repositioning capacity at discounted rates</li>
+<li>**Omnichannel** — SMS, WhatsApp, Telegram, Voice, Email adapters built (pre-customer)</li>
+<li>**i18n** — 8 languages (EN, NL, DE, AR, PT-BR, ES, FR, JA) across 40 pages × 9 namespaces</li>
+<li>**Unified trip timeline** — Tracking + messaging merged. iMessage-meets-package-tracking UX</li>
+<li>**Reviews** — Two-way (customer ↔ operator), AI-moderated</li>
+<li>**GDPR** — Data rights, cookie policy, acceptable use pages built</li>
+<li>**Trust scores** — Calculated per operator based on activity and reviews</li>
+</ul>
+<h3>Current State (April 2026)</h3>
+<ul>
+<li>**Platform:** Technically complete and deployed across dev/staging/prod</li>
+<li>**Pipeline:** DOWN as of April 7 (DevNerds pipeline not functional)</li>
+<li>**P0 blockers still open:** Google SSO broken, admin login auth issues, notification pipeline never fully working (5+ weeks), api.goflight.io DNS issues</li>
+<li>**Feature freeze:** In effect. No new features until first operator is live</li>
+<li>**Landing page:** Jack's copy live at goflight.ai. Standalone S3 static HTML + CloudFront</li>
+</ul>
+<h3>Technical Metrics</h3>
+<table>
+<tr><td>Metric</td><td>Value</td></tr>
+<tr><td>Lambda microservices</td><td>38</td></tr>
+<tr><td>CI/CD pipelines</td><td>35 (path-based triggers)</td></tr>
+<tr><td>Frontend tests passing</td><td>1,475 (11s runtime)</td></tr>
+<tr><td>Total tasks tracked</td><td>300+</td></tr>
+<tr><td>Completed tasks</td><td>~270+</td></tr>
+<tr><td>DynamoDB tables</td><td>Per-environment (users, trips, bids, tracking, events, tasks)</td></tr>
+<tr><td>Environments</td><td>Dev, Staging, Production (separate S3, CloudFront, API Gateway)</td></tr>
+<tr><td>Commits (March 2026 alone)</td><td>354</td></tr>
+</table>
+<hr>
+<h2>Market & Competition</h2>
+<h3>Market Size</h3>
+<ul>
+<li>Global air charter: **~$30B** (2024), growing 5-8% CAGR</li>
+<li>US on-demand charter (GoFlight's target): **~$4-5B**</li>
+<li>Private jet booking platform sub-market: **$3.5B → $7.2B by 2032** (8.6% CAGR)</li>
+<li>Market currently softening: on-demand hours dropped 5.2% in H1 2024</li>
+</ul>
+<h3>Competitors</h3>
+<table>
+<tr><td>Competitor</td><td>Model</td><td>Key Strength</td><td>Revenue</td><td>Threat Level</td></tr>
+<tr><td>**Avinode**</td><td>B2B SaaS ($5-15K/yr subs)</td><td>1,000+ operator network, platform lock-in</td><td>$30-50M</td><td>HIGH — could add AI layer to existing network overnight</td></tr>
+<tr><td>**XO / Vista**</td><td>B2C + own fleet (360+ aircraft)</td><td>Vertical integration, $3B+ parent revenue</td><td>$500M+</td><td>HIGH — resources dwarf GoFlight</td></tr>
+<tr><td>**Wheels Up**</td><td>Membership + fleet (~170 own)</td><td>Delta Airlines backing, NYSE listed</td><td>~$750M</td><td>MEDIUM — restructuring, massive losses</td></tr>
+<tr><td>**PrivateFly**</td><td>Broker + tech</td><td>Booking Holdings (BKNG) parent, SEO dominance</td><td>Part of BKNG</td><td>MEDIUM</td></tr>
+<tr><td>**Hamilton AI**</td><td>AI-first marketplace</td><td>$10M raised, auto-quote live, email-only weakness</td><td>Pre-revenue</td><td>HIGH — direct competitor, better funded</td></tr>
+<tr><td>**Tivoli**</td><td>Operator marketplace</td><td>~4K operators, 3M txns/yr, AI pricing engine launching May 2026</td><td>Unknown</td><td>HIGH — massive supply advantage</td></tr>
+<tr><td>**FlyHouse**</td><td>AI charter</td><td>Raised $300M</td><td>Unknown</td><td>HIGH</td></tr>
+</table>
+<h3>Differentiation</h3>
+<p><strong>Honest assessment:</strong> GoFlight has <strong>no durable competitive advantage today.</strong> The AI Wingman is replicable in 3-6 months by any funded competitor. The 3% fee is a race to the bottom. The differentiation must come from <strong>network effects and data</strong> — which require operators and bookings that don't yet exist.</p>
+<p><strong>What could differentiate (if executed):</strong></p>
+<ul>
+<li>Operator tools (SaaS + marketplace hybrid) — serve the industry, don't just disrupt it</li>
+<li>Mid-market focus where luxury brokers underserve</li>
+<li>Cargo + passenger on single platform</li>
+<li>Hospitality-first UX vs. transactional competitors</li>
+</ul>
+<h3>Failed Precedents</h3>
+<p>BlackJet, Beacon, JetSmarter — the "Uber for jets" thesis has a poor track record. GoFlight must avoid this pattern.</p>
+<hr>
+<h2>Financials</h2>
+<h3>Funding</h3>
+<ul>
+<li>**Bootstrapped** to date. No external investment</li>
+<li>Jack self-funding from AWS salary (Senior Solutions Architect, 3.5 years)</li>
+<li>**Mercury business banking** opened Feb 26, 2026. IO card + virtual card set up April 2026</li>
+<li>**Seed raise needed:** $500K-$1M for 18-month runway (from strategic analysis)</li>
+<li>**Business dev call with Mercury** scheduled April 14, 2026 — discussing financial setup</li>
+</ul>
+<h3>Key Financial Metrics</h3>
+<ul>
+<li>**Revenue:** $0 (pre-revenue)</li>
+<li>**Customers:** 0</li>
+<li>**Operators on platform:** 0</li>
+<li>**Completed bookings:** 0</li>
+<li>**Monthly burn:** ~$800-1,200 (reduced after Gemma4 migration)</li>
+<li>**Runway:** Indefinite at current burn (funded from salary), but opportunity cost is high</li>
+<li>**CAC estimate (HNWI):** $3,000-5,000 per customer</li>
+<li>**LTV:CAC ratio:** Likely 1-2x (below 3x target)</li>
+</ul>
+<h3>Probability Assessment (from strategic analysis, March 2026)</h3>
+<ul>
+<li>**Probability of reaching $5M ARR in 3 years: 12-18%** (pure marketplace model)</li>
+<li>**With SaaS hybrid pivot: ~30-40%**</li>
+<li>Investment verdict from analysis: "PASS at current stage, NEGOTIATE if team pivots to hybrid SaaS+marketplace"</li>
+</ul>
+<hr>
+<h2>Team & Organisation</h2>
+<h3>Core Team</h3>
+<table>
+<tr><td>Person</td><td>Role</td><td>Status</td></tr>
+<tr><td>**Jack Bradham**</td><td>Founder, product owner, sole operator</td><td>Active. AWS Senior SA by day (2-4h actual work). GoFlight hours: 8am-9pm M-F</td></tr>
+<tr><td>**Adam Hensley**</td><td>Co-founder (business development)</td><td>**Going quiet / parting ways** (decided March 21). Operating agreement never signed. Biz-only access remains via Telegram</td></tr>
+<tr><td>**Aaron Fiser**</td><td>Domain consultant (cargo)</td><td>**Fired March 19.** $1,250 spent, minimal output</td></tr>
+</table>
+<h3>AI Agent Team ("The Nerds")</h3>
+<table>
+<tr><td>Agent</td><td>Role</td><td>Status</td></tr>
+<tr><td>**Velma**</td><td>PA / chief of staff / triage</td><td>Active — runs email, briefings, dispatch</td></tr>
+<tr><td>**Runway**</td><td>Backend developer</td><td>Ad hoc dispatch only</td></tr>
+<tr><td>**Pixel**</td><td>Frontend/design engineer</td><td>Ad hoc dispatch only</td></tr>
+<tr><td>**Lander**</td><td>Infrastructure/ops</td><td>Ad hoc dispatch only</td></tr>
+<tr><td>**Gremlin**</td><td>QA browser bot</td><td>Disabled (pipeline down)</td></tr>
+<tr><td>**Aaron (agent)**</td><td>Factory foreman</td><td>Disabled (pipeline down)</td></tr>
+<tr><td>**Recon**</td><td>Competitive intelligence</td><td>Fri 9am cron (Gemma4)</td></tr>
+<tr><td>**The Bobs**</td><td>Business advisory council</td><td>Mon 9am cron (Gemma4)</td></tr>
+</table>
+<h3>Advisory / Contacts</h3>
+<table>
+<tr><td>Person</td><td>Relationship</td><td>Notes</td></tr>
+<tr><td>**Bryce Cannon**</td><td>Warm operator lead (Vantage Air)</td><td>Email sent March 22. Only warm operator contact identified. Follow-up overdue</td></tr>
+<tr><td>**Wouter Witvoet**</td><td>Hamilton AI founder (competitor)</td><td>Contact: wouter@hamilton.ai, 302-563-3823. $10M raised</td></tr>
+<tr><td>**Kermit Bolick**</td><td>Jack's CPA (Huggins)</td><td>kkbolick@hugginscpa.com</td></tr>
+<tr><td>**Mary Ann Bradham**</td><td>Wife, decision partner</td><td>Math prof at CPCC</td></tr>
+<tr><td>**Jay Harris**</td><td>Best friend, daily sounding board</td><td>Daily 8am call, 20-year friendship</td></tr>
+</table>
+<hr>
+<h2>Technical Architecture</h2>
+<h3>Stack</h3>
+<ul>
+<li>**Frontend:** React (CRA), Jest (1,475 tests, 11s), code splitting, i18n</li>
+<li>**Backend:** Python 3.11 Lambda functions (38 microservices)</li>
+<li>**Database:** DynamoDB (single-table design with GSI indexes)</li>
+<li>**Auth:** AWS Cognito (shared user pool across envs — known issue)</li>
+<li>**Payments:** Stripe (checkout, escrow, webhooks). Secrets in AWS Secrets Manager</li>
+<li>**CDN:** CloudFront (3 distributions: dev, staging, prod)</li>
+<li>**Storage:** S3 (per-environment frontend buckets + data bucket)</li>
+<li>**IaC:** AWS CDK (TypeScript orchestrating Python Lambdas)</li>
+<li>**CI/CD:** GitHub Actions → AWS CodePipeline/CodeBuild. 35 path-based pipelines. Push to main = deploy</li>
+<li>**AI:** Wingman uses LLM APIs (Anthropic/OpenAI). Agent team on ollama/gemma4 (local)</li>
+<li>**Voice:** ElevenLabs (+1 305-363-1121)</li>
+<li>**Hosting (agents):** Hetzner CPX31 (16GB RAM, 4GB swap)</li>
+<li>**Monitoring:** Basic CloudWatch. No alerting for agent failures (known gap)</li>
+</ul>
+<h3>Domains</h3>
+<ul>
+<li>**goflight.ai** — Primary (landing page: S3 static + CloudFront `EJL40ZNQVACMC`)</li>
+<li>**dev.goflight.ai** — Development environment</li>
+<li>**staging.goflight.ai** — Staging environment</li>
+<li>**api.goflight.ai** — API (DNS issues as of March 2026)</li>
+<li>**goflight.io** — 301 redirect to .ai</li>
+<li>**nerds.struktproto.com** — Task board / factory output dashboard</li>
+</ul>
+<h3>Key Infrastructure IDs</h3>
+<ul>
+<li>**AWS Account:** 964242332422</li>
+<li>**Cognito Pool:** us-east-1_Hn15ucGfR</li>
+<li>**Nerd Board API Gateway:** nmv5m59txi</li>
+<li>**Nerd Board Lambda:** nerd-board-api</li>
+<li>**Landing CloudFront:** EJL40ZNQVACMC</li>
+<li>**Event Log:** DynamoDB `goflight-event-log`</li>
+<li>**Task DB:** DynamoDB `goflight-tasks`</li>
+</ul>
+<h3>Deployment Rules (non-negotiable)</h3>
+<ul>
+<li>**CI/CD only** — push to GitHub → pipeline deploys. NEVER manually deploy</li>
+<li>**Straight to main** — no PRs, no feature branches ("we don't do PRs, we straight merge")</li>
+<li>**Dev only** for all current work. Staging/prod configured but not actively tested</li>
+<li>**Feature freeze** in effect until first operator is live</li>
+</ul>
+<hr>
+<h2>Key Decisions & Pivots</h2>
+<h3>Decision: Brand Name (Feb 21, 2026)</h3>
+<p><strong>GoFlight</strong> selected. "Brandon" creative project archived. Domain goflight.io confirmed owned. Later acquired goflight.ai ($1,800 via GoDaddy broker) and made it primary (March 29).</p>
+<h3>Decision: Delaware C-Corp via Stripe Atlas (March 3, 2026)</h3>
+<p>Chose Delaware C-Corp over FL LLC or WY C-Corp. Filed through Stripe Atlas ($500). Entity: <strong>Strukt & Proto, Inc.</strong> EIN: 41-4338471.</p>
+<h3>Decision: Fire Aaron Fiser (March 19, 2026)</h3>
+<p>Domain consultant hired Feb 17 at $1K/month. Output: one batch of domain expertise answers via email in 5 weeks. <strong>Lesson:</strong> Don't hire domain experts before you have users to apply the expertise for.</p>
+<h3>Decision: Part Ways with Adam Hensley (March 21, 2026)</h3>
+<p>Co-founder went quiet after minimal contribution (a few PRs on Feb 27, then silence). Operating agreement was <strong>never signed</strong>. Equity position never formalised. <strong>Lesson:</strong> Formalise governance before building. <strong>Risk:</strong> Cap table ambiguity if an investor asks. <strong>Status as of April 10:</strong> Formal conversation not yet confirmed complete.</p>
+<h3>Decision: Feature Freeze (March 22, 2026)</h3>
+<p>Business review revealed "world-class infrastructure, zero commercial traction." Jack declared feature freeze: no new features until platform works end-to-end and an operator is using it. Factory limited to bug fixes, testing, and landing page polish.</p>
+<h3>Decision: .ai Domain Primary (March 29, 2026)</h3>
+<p>All 125 spec/doc files updated (477 substitutions). goflight.io → goflight.ai 301 redirect. Brand consistency locked.</p>
+<h3>Decision: Migrate Agents to Gemma4 (April 7, 2026)</h3>
+<p>All cron agents moved from Anthropic API to ollama/gemma4 (local, free). Zero Anthropic spend on automated runs. Main Velma session remains on Claude Opus. <strong>Impact:</strong> Significant cost reduction.</p>
+<h3>Decision: Asana Killed (April 2026)</h3>
+<p>Asana abandoned. <code>memory/open-loops.md</code> is the single source of truth for task tracking. DynamoDB <code>goflight-tasks</code> for dev tasks.</p>
+<h3>Pivot Not Yet Taken: SaaS + Marketplace Hybrid</h3>
+<p>The March 2026 strategic analysis recommended pivoting from pure marketplace to a <strong>hybrid SaaS + marketplace</strong> model — selling AI tools to operators while building the marketplace as secondary revenue. This would increase success probability from ~15% to ~30-40%. <strong>Jack has not acted on this recommendation.</strong> It remains the single most important strategic decision pending.</p>
+<hr>
+<h2>Current Status & Next 90 Days</h2>
+<h3>Where We Are (April 10, 2026)</h3>
+<ul>
+<li>**Product:** Complete but not commercially used. Pipeline down. Feature freeze active</li>
+<li>**Business:** Zero revenue, zero operators, zero bookings. One warm lead (Bryce Cannon, stale)</li>
+<li>**Burn:** ~$800-1,200/month, self-funded from AWS salary</li>
+<li>**Team:** Jack only (Adam departing, no employees)</li>
+<li>**Immediate focus:** Mercury banking setup (call Apr 14), Geneva EBACE trip planning (June 2-4), AWS cost optimisation</li>
+</ul>
+<h3>Active Priorities</h3>
+<p>1. <strong>Geneva EBACE trip</strong> (June 2-4) — Jack + Mary Ann. Budget ~$4,770-6,070. Not yet booked. This is the next major operator acquisition opportunity (25K+ attendees at NBAA-BACE, EBACE is the European equivalent)</p>
+<p>2. <strong>CodeBuild + CodePipeline cost optimisation</strong> — Reduce AWS CI/CD spend</p>
+<p>3. <strong>Mercury financial setup</strong> — Call with Jade Mercury on April 14</p>
+<p>4. <strong>Pipeline repair</strong> — DevNerds pipeline down since April 7</p>
+<h3>Next 90 Days (April–July 2026)</h3>
+<ul>
+<li>**April:** Fix pipeline, reduce AWS costs, complete Mercury banking setup</li>
+<li>**May:** TBD — Tivoli launches AI pricing engine (competitive pressure)</li>
+<li>**June 2-4:** EBACE Geneva — primary operator acquisition event</li>
+<li>**Target:** 10 active operators, 3 completed bookings by end of Q2 (ambitious, not on current trajectory)</li>
+<li>**NBAA-BACE October 2026:** 25K attendees, target for scaled operator outreach</li>
+</ul>
+<hr>
+<h2>Open Questions & Risks</h2>
+<h3>Unresolved Questions</h3>
+<ul>
+<li>**Cap table:** Adam's equity position never formalised. Operating agreement never signed. Must resolve before any investor conversation. **URGENT**</li>
+<li>**SaaS pivot:** Should GoFlight add operator SaaS tools alongside marketplace? Strategic analysis says yes. Jack hasn't decided. **HIGH IMPACT**</li>
+<li>**Payment processing:** ACH/wire integration needed for economic viability. Not built. **CRITICAL**</li>
+<li>**Take rate:** 3% may be unsustainable after payment processing. Should it be 4-5%? Add operator SaaS subscription? **TBD**</li>
+<li>**Burn rate accuracy:** Hetzner, ElevenLabs, and Anthropic actual costs still unconfirmed as of April 10</li>
+<li>**Pipeline repair:** DevNerds pipeline down. No timeline for fix</li>
+<li>**Notification system:** Has never worked reliably (5+ weeks of attempts across Twilio, Telnyx). Table-stakes for a booking platform</li>
+</ul>
+<h3>Risks</h3>
+<table>
+<tr><td>Risk</td><td>Severity</td><td>Likelihood</td><td>Mitigation</td></tr>
+<tr><td>**Cold-start marketplace failure** (no operators → no customers → no operators)</td><td>CRITICAL</td><td>HIGH</td><td>Operator-first GTM, EBACE networking, Bryce Cannon relationship</td></tr>
+<tr><td>**Hamilton AI / Tivoli competition**</td><td>HIGH</td><td>HIGH</td><td>Speed to market, differentiated UX, mid-market focus</td></tr>
+<tr><td>**Solo founder burnout**</td><td>HIGH</td><td>MEDIUM</td><td>ADHD management, AWS salary as safety net, Velma scaffolding</td></tr>
+<tr><td>**Cap table ambiguity**</td><td>HIGH</td><td>HIGH</td><td>Legal resolution with Adam required before any raise</td></tr>
+<tr><td>**Payment economics**</td><td>HIGH</td><td>HIGH</td><td>ACH/wire integration, potential take-rate increase</td></tr>
+<tr><td>**Agent infrastructure fragility**</td><td>MEDIUM</td><td>HIGH</td><td>Gemma4 migration reduced costs; reliability still unmonitored</td></tr>
+<tr><td>**Feature creep resumption**</td><td>MEDIUM</td><td>MEDIUM</td><td>Feature freeze enforced by Velma</td></tr>
+<tr><td>**AWS day-job distraction**</td><td>MEDIUM</td><td>HIGH</td><td>Jack works 2-4h actual; GoFlight hours 8am-9pm M-F</td></tr>
+</table>
+<h3>Probability of Success</h3>
+<p>Per the March 2026 strategic analysis:</p>
+<ul>
+<li>**Pure marketplace model: 12-18%** chance of reaching $5M ARR in 3 years</li>
+<li>**Hybrid SaaS + marketplace: 30-40%**</li>
+<li>Investment verdict: "PASS at current stage, NEGOTIATE if team pivots"</li>
+</ul>
+<hr>
+<h2>Reference Data</h2>
+<h3>Entity</h3>
+<ul>
+<li>**Company:** Strukt & Proto, Inc.</li>
+<li>**Type:** Delaware C-Corp (Stripe Atlas)</li>
+<li>**EIN:** 41-4338471</li>
+<li>**Banking:** Mercury (IO card + virtual card, set up April 2026)</li>
+</ul>
+<h3>Domains</h3>
+<ul>
+<li>goflight.ai (primary)</li>
+<li>goflight.io (301 → .ai)</li>
+<li>dev.goflight.ai / staging.goflight.ai / api.goflight.ai</li>
+<li>nerds.struktproto.com (internal task board)</li>
+<li>docs.goflight.io (documentation site)</li>
+</ul>
+<h3>Contact</h3>
+<ul>
+<li>**Jack Bradham:** jack@goflight.ai (M365), +1 704-578-5942</li>
+<li>**Velma (AI):** velma@goflight.ai (M365)</li>
+<li>**Wingman voice:** +1 305-363-1121 (ElevenLabs)</li>
+</ul>
+<h3>AWS</h3>
+<ul>
+<li>**Account:** 964242332422</li>
+<li>**Region:** us-east-1</li>
+<li>**IAM (Velma):** velma-ai-assistant (read-only)</li>
+</ul>
+<h3>Industry Events</h3>
+<ul>
+<li>**NBAA SDC Cleveland:** March 24-26, 2026 — ATTENDED</li>
+<li>**EBACE Geneva:** June 2-4, 2026 — PLANNING</li>
+<li>**NBAA-BACE:** October 2026 — TARGET (25K attendees)</li>
+<li>**SDC Fort Lauderdale:** February 2027 — BACKUP</li>
+</ul>
+<h3>Key Competitors to Monitor</h3>
+<ul>
+<li>Hamilton AI (wouter@hamilton.ai) — AI-first, $10M raised</li>
+<li>Tivoli — 4K operators, AI pricing engine May 2026</li>
+<li>Avinode — 1,000+ operators, expanding into payments/analytics</li>
+<li>FlyHouse — $300M raised</li>
+</ul>
+<hr>
+<p>*This document is the single source of truth for GoFlight company context. Update when decisions are made, metrics change, or milestones are hit. Designed for LLM context injection and human pitch prep.*</p>
+        </div>
+    </div>
+
+    <script>
+        const validCodes = ['charter', 'flight', 'runway'];
+        
+        function checkAccess() {
+            const code = document.getElementById('accessCode').value;
+            if (validCodes.includes(code.toLowerCase())) {
+                sessionStorage.setItem('authenticated', 'true');
+                showWiki();
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+        
+        function showWiki() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('wikiScreen').style.display = 'block';
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('wikiScreen').style.display = 'none';
+            document.getElementById('accessCode').value = '';
+        }
+        
+        function checkAuth() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                showWiki();
+            }
+        }
+        
+        document.getElementById('accessCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkAccess();
+        });
+        
+        window.addEventListener('load', checkAuth);
+    </script>
+</body>
+</html>
