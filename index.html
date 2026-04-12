@@ -3,587 +3,1374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoFlight Investor Wiki</title>
+    <title>GoFlight - Investor Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .auth-screen {
+
+        :root {
+            --primary: #0A2540;
+            --accent: #2E75B6;
+            --accent-light: #EBF5FF;
+            --success: #00D4AA;
+            --gold: #C5962A;
+            --bg-main: #FAFBFC;
+            --bg-card: #FFFFFF;
+            --bg-alt: #F4F5F7;
+            --border: #E6E9ED;
+            --text-primary: #0A2540;
+            --text-body: #425466;
+            --text-muted: #586B7D;
+            --text-light: #8898AA;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-body);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* ============ ACCESS GATE ============ */
+        .access-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #F8FAFC 0%, #EBF5FF 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            z-index: 10000;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            opacity: 1;
+            visibility: visible;
         }
-        .auth-modal {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
+
+        .access-gate.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .gate-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 64px 56px;
+            max-width: 640px;
+            width: 90%;
             text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
-        .auth-modal h1 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            color: #1a1a1a;
+
+        .gate-logo {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: center;
         }
-        .auth-modal p {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.95em;
+
+        .gate-logo svg {
+            height: 48px;
+            width: auto;
         }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            font-size: 1em;
+
+        .gate-card h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
         }
-        input:focus {
+
+        .gate-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .access-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .access-input {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease;
+        }
+
+        .access-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent);
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .access-btn {
+            padding: 12px 24px;
+            background: var(--accent);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 1em;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        button:hover {
-            opacity: 0.9;
+
+        .access-btn:hover {
+            background: #1e5a96;
+            box-shadow: 0 4px 12px rgba(46, 117, 182, 0.24);
+            transform: translateY(-2px);
         }
-        .error {
-            color: #d32f2f;
-            margin-top: 15px;
-            font-size: 0.9em;
+
+        .access-btn:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #D32F2F;
+            font-size: 13px;
+            margin-top: 16px;
             display: none;
+            animation: shake 0.4s ease;
         }
-        .wiki-screen {
-            display: none;
-            background: white;
+
+        .error-message.show {
+            display: block;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: white;
-            min-height: 100vh;
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
-        h1 { font-size: 2.5em; margin: 40px 0 20px; color: #1a1a1a; border-bottom: 3px solid #0066cc; padding-bottom: 10px; }
-        h2 { font-size: 2em; margin: 30px 0 15px; color: #1a1a1a; }
-        h3 { font-size: 1.5em; margin: 20px 0 10px; color: #333; }
-        h4 { font-size: 1.2em; margin: 15px 0 8px; color: #555; }
-        p { margin: 15px 0; }
-        ul { margin: 15px 0 15px 30px; }
-        li { margin: 8px 0; }
-        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9em; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        blockquote { border-left: 4px solid #0066cc; padding-left: 15px; margin: 20px 0; color: #666; font-style: italic; }
-        strong { color: #1a1a1a; font-weight: 600; }
-        em { font-style: italic; }
-        a { color: #0066cc; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        hr { border: none; border-top: 2px solid #ddd; margin: 40px 0; }
-        .auth-banner {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            padding: 15px;
-            margin-bottom: 30px;
-            border-radius: 4px;
+
+        /* ============ MAIN LAYOUT ============ */
+        .app-container {
             display: flex;
-            justify-content: space-between;
+            height: 100vh;
+        }
+
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            width: 240px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-logo {
+            padding: 32px 20px;
+            display: flex;
             align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
         }
-        .logout-btn {
-            background: #d32f2f;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
+
+        .sidebar-logo svg {
+            height: 32px;
+            width: auto;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
             cursor: pointer;
-            font-size: 0.9em;
         }
+
+        .nav-item:hover {
+            color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: var(--bg-alt);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+        }
+
         .logout-btn:hover {
-            background: #b71c1c;
+            background: #EEF2F7;
+            color: var(--text-primary);
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .content-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(46, 117, 182, 0.02) 0%, rgba(0, 212, 170, 0.02) 100%);
+            margin: -48px -48px 80px;
+            padding: 80px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-logo {
+            margin-bottom: 32px;
+        }
+
+        .hero-logo svg {
+            height: 64px;
+            width: auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .hero-tagline {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #FFF5E6 0%, #FFFAEF 100%);
+            border: 1px solid #E6D4A8;
+            border-radius: 24px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============ SECTIONS ============ */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section:nth-child(odd) {
+            background: var(--bg-main);
+        }
+
+        .section:nth-child(even) {
+            background: var(--bg-alt);
+            margin-left: -48px;
+            margin-right: -48px;
+            padding: 80px 48px;
+            margin-bottom: 0;
+        }
+
+        .section h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 24px 0 12px 0;
+        }
+
+        .section p {
+            color: var(--text-body);
+            margin-bottom: 16px;
+        }
+
+        .section ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+            color: var(--text-body);
+        }
+
+        /* ============ CALLOUT BOX ============ */
+        .callout {
+            background: var(--accent-light);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .callout strong {
+            color: var(--primary);
+        }
+
+        .callout p {
+            margin-bottom: 0;
+        }
+
+        /* ============ STAT CARDS ============ */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============ TABLES ============ */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 32px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-alt);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-body);
+            font-size: 14px;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--bg-alt);
+        }
+
+        /* ============ TIMELINE ============ */
+        .timeline {
+            position: relative;
+            padding-left: 32px;
+            margin: 32px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 4px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border: 2px solid var(--bg-card);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--border);
+        }
+
+        .timeline-date {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-content {
+            color: var(--text-body);
+            margin-top: 8px;
+        }
+
+        /* ============ CTA BOX ============ */
+        .cta-box {
+            background: linear-gradient(135deg, var(--accent-light) 0%, rgba(46, 117, 182, 0.08) 100%);
+            border: 1px solid #CCDFEE;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        .cta-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .cta-box p {
+            margin-bottom: 20px;
+            color: var(--text-body);
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 48px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 13px;
+            margin-top: 80px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                position: static;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            }
+
+            .sidebar-nav {
+                display: flex;
+                gap: 8px;
+                padding: 12px;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                white-space: nowrap;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-wrapper {
+                padding: 24px;
+            }
+
+            .hero {
+                margin: -24px -24px 40px;
+                padding: 40px 24px;
+            }
+
+            .section:nth-child(even) {
+                margin-left: -24px;
+                margin-right: -24px;
+                padding: 40px 24px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gate-card {
+                margin: 20px;
+                padding: 40px 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-screen" id="authScreen">
-        <div class="auth-modal">
-            <h1>GoFlight Investor Wiki</h1>
-            <p>Enter your access code to view</p>
-            <input type="password" id="accessCode" placeholder="Access code" autocomplete="off">
-            <button onclick="checkAccess()">Access</button>
-            <div class="error" id="error">Invalid access code</div>
+    <!-- ACCESS GATE -->
+    <div class="access-gate" id="accessGate">
+        <div class="gate-card">
+            <div class="gate-logo"><img src="data:image/png;base64,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" alt="GoFlight" style="height: 48px;"></div>
+            <p>Investor Access · Confidential</p>
+            <form class="access-form" id="accessForm">
+                <input type="password" class="access-input" id="accessCode" placeholder="Enter access code" required>
+                <button type="submit" class="access-btn">Unlock</button>
+            </form>
+            <div class="error-message" id="errorMessage">Invalid access code. Please try again.</div>
+            <div style="margin-top: 28px; padding: 24px; border-top: 1px solid rgba(0,0,0,0.08); background: rgba(0,0,0,0.02); border-radius: 8px;">
+                <p style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: #C5962A; margin-bottom: 20px; text-align: left;">Our Vision</p>
+                <p style="font-size: 15px; line-height: 1.8; color: #0A2540; margin-bottom: 14px; text-align: justify; font-weight: 400;">The airplane didn&rsquo;t shrink the world. The people of aviation did.</p>
+                <p style="font-size: 14px; line-height: 1.8; color: #425466; margin-bottom: 14px; text-align: justify;">It&rsquo;s a big community &mdash; people of many talents and disciplines, blending their skills into something the rest of the world simply calls <em>a flight.</em></p>
+                <p style="font-size: 14px; line-height: 1.8; color: #425466; margin-bottom: 14px; text-align: justify;">GoFlight is being built with the people doing this work, and for everyone who depends on them. Not around them. <strong style="color: #0A2540;">With them.</strong></p>
+                <p style="font-size: 14px; line-height: 1.8; color: #425466; margin-bottom: 14px; text-align: justify;">We think the work can be done easier, faster, better, and more fun. The industry has barriers we can remove &mdash; complexity to simplify, innovations still to implement, and tools that finally maximize the people using them.</p>
+                <p style="font-size: 15px; line-height: 1.8; color: #2E75B6; font-weight: 600; text-align: left; margin-top: 18px;">Together.</p>
+            </div>
         </div>
     </div>
 
-    <div class="wiki-screen" id="wikiScreen">
-        <div class="auth-banner">
-            <span><strong>Investor Access.</strong> Confidential document.</span>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+    <!-- MAIN APP -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="sidebar-logo"><img src="data:image/png;base64,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" alt="GoFlight" style="height: 32px;"></div>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <a class="nav-item active" data-section="hero">Home</a>
+                <a class="nav-item" data-section="executive-summary">Executive Summary</a>
+                <a class="nav-item" data-section="mission">Mission & Strategy</a>
+                <a class="nav-item" data-section="business-model">Business Model</a>
+                <a class="nav-item" data-section="product">Product</a>
+                <a class="nav-item" data-section="market">Market & Competition</a>
+                <a class="nav-item" data-section="founder">Founder</a>
+                <a class="nav-item" data-section="entity">Corporate Entity</a>
+                <a class="nav-item" data-section="timeline">Timeline</a>
+                <a class="nav-item" data-section="risks">Risks &amp; Open Questions</a>
+                <a class="nav-item" data-section="events">Events</a>
+                <a class="nav-item" data-section="contact">Contact</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn">Log Out</button>
+            </div>
         </div>
-        <div class="container">
-            <h1>GoFlight Company Wiki</h1>
-<table>
-<tr></tr>
-<p><strong>Purpose:</strong> Investor-ready knowledge base, pitch deck source, operational reference</p>
-</table>
-<hr>
-<h2>Executive Summary</h2>
-<p><strong>GoFlight</strong> is an AI-native private aviation marketplace connecting charter passengers and cargo shippers directly with Part 135 operators. Built by <strong>Strukt & Proto, Inc.</strong> (Delaware C-Corp, incorporated March 2026 via Stripe Atlas), the platform replaces traditional brokers with a conversational AI called <strong>Wingman</strong>. Stage: <strong>pre-revenue, product complete, seeking first operator</strong>. Primary goal: sign 10 active operators and complete 3 real bookings by June 2026. Founder: <strong>Jack Bradham</strong>, Davidson, NC.</p>
-<hr>
-<h2>Timeline</h2>
-<table>
-<tr><td>Date</td><td>Milestone</td></tr>
-<tr><td>**Mid-2025**</td><td>Initial GoFlight development begins (AWS infrastructure, early Lambda functions)</td></tr>
-<tr><td>**2026-02-03**</td><td>Asana project created; formal launch planning begins</td></tr>
-<tr><td>**2026-02-15**</td><td>Velma (AI PA) onboarded. First code audit: **3/10** readiness. Revised to **7.8/10** after full AWS infrastructure audit revealed 42 backend endpoints, 37 dev users, 14 trips, 21 bids already in DynamoDB</td></tr>
-<tr><td>**2026-02-17**</td><td>Aaron Fiser hired as domain consultant ($1K/month, 8-10 hrs/week). Spec interview: cancellation policy, payment flow, Wingman scope, empty legs, trip tracking decisions locked</td></tr>
-<tr><td>**2026-02-21**</td><td>Brand name **GoFlight** confirmed. goflight.io domain secured</td></tr>
-<tr><td>**2026-02-23**</td><td>Entity discussions begin (FL LLC vs WY C-Corp vs DE C-Corp)</td></tr>
-<tr><td>**2026-02-24**</td><td>Massive infrastructure day: 6 CDK stacks, 19 API endpoints wired, docs.goflight.io live, Stripe test keys, SES email</td></tr>
-<tr><td>**2026-02-26**</td><td>Twilio shut down (A2P registration failed). Telnyx SMS started. **EIN received: 41-4338471**. Mercury banking opened. Adam Hensley's first PRs merged</td></tr>
-<tr><td>**2026-03-01**</td><td>Omnichannel Wingman built: SMS, WhatsApp, Telegram, Voice. ElevenLabs phone line live (+1 305-363-1121)</td></tr>
-<tr><td>**2026-03-03**</td><td>**Stripe Atlas filed → Delaware C-Corp (Strukt & Proto, Inc.)**. DAFT Dutch residency approved (Jan 2026–Jan 2028). Agent team ("The Nerds") created</td></tr>
-<tr><td>**2026-03-05**</td><td>Largest single-day sprint. All CRITICAL/HIGH security issues fixed. Stripe live keys wired. Operator onboarding wizard built. Task board deployed</td></tr>
-<tr><td>**2026-03-08**</td><td>Application gap audit: 22 stacks NOT in prod. Sprint 2 dispatched</td></tr>
-<tr><td>**2026-03-10**</td><td>**Soft launch target date.** Platform technically live on prod. No operators invited. No announcement made</td></tr>
-<tr><td>**2026-03-11–16**</td><td>Jack in Amsterdam (DAFT biometrics). Dev continued autonomously. Two P0 prod failures discovered on return: Cognito pointing to staging Lambda; Stripe webhook secret missing in prod</td></tr>
-<tr><td>**2026-03-17–18**</td><td>Moses agent broken. OpenClaw reinstalled. Moses replaced with Aaron (agent). 10 crons found running invalid Gemini model</td></tr>
-<tr><td>**2026-03-19**</td><td>**Aaron Fiser (human) fired.** ~$1,250 spent for minimal output (one domain Q&A email in 5 weeks)</td></tr>
-<tr><td>**2026-03-20**</td><td>**Dev Factory rebuilt.** 19 features shipped overnight autonomously. "State of GoFlight" written: 38 microservices, 35 CI/CD pipelines, 1,475 tests, 354 commits in March</td></tr>
-<tr><td>**2026-03-21**</td><td>Adam Hensley going quiet — Jack decides to part ways. Gremlin QA bot deployed</td></tr>
-<tr><td>**2026-03-22**</td><td>**Business Review written** (the honest one). 252 tasks total. Verdict: "world-class infrastructure, zero commercial traction"</td></tr>
-<tr><td>**2026-03-24–26**</td><td>**NBAA SDC Cleveland attended.** Intel gathered on Hamilton AI ($10M raised), Tivoli (~4K operators, AI pricing engine launching May 2026), FBO landscape</td></tr>
-<tr><td>**2026-03-29**</td><td>Jack turns 47. All `.io` references purged from specs (125 files, 477 substitutions). **goflight.ai** becomes the primary domain. goflight.io → .ai 301 redirect live</td></tr>
-<tr><td>**2026-03-31**</td><td>Soft launch window passes. No commercial traction</td></tr>
-<tr><td>**2026-04-04**</td><td>Dev pipeline v2 archived. DynamoDB task board (`goflight-tasks`) becomes single source of truth</td></tr>
-<tr><td>**2026-04-07**</td><td>All agent crons migrated to **ollama/gemma4** (local, free). Zero Anthropic spend on crons. Pipeline marked DOWN. Feature freeze in effect</td></tr>
-<tr><td>**2026-04-08**</td><td>velma@goflight.ai M365 account created. Context pruning enabled (2-hour window)</td></tr>
-<tr><td>**2026-04-10**</td><td>Mercury business account set up. Business dev call with Jade Mercury scheduled Apr 14</td></tr>
-</table>
-<hr>
-<h2>Mission & Strategy</h2>
-<h3>Positioning</h3>
-<p><strong>"Tell us what you need. We handle the rest."</strong></p>
-<p>GoFlight is positioned as the <strong>hospitality-first</strong> alternative to traditional brokers and legacy platforms. The gap in private aviation isn't technology — it's <strong>hospitality</strong>. Every competitor treats customers as transactions; GoFlight treats them as guests.</p>
-<h3>Brand Direction (locked March 22, 2026)</h3>
-<ul>
-<li>**Bauhaus visual aesthetic** with warm, human copy</li>
-<li>Wingman is a **character** (warm, confident, slightly cheeky) — not a chatbot widget</li>
-<li>Never lead with "AI-powered" — AI is how it works, not why you use it</li>
-<li>Two audiences served equally: **passengers** ("just say where you're going") and **operators** ("get booked directly, 3% flat")</li>
-<li>**Voice:** Direct, punchy, human. Confident but not arrogant. Short sentences, no jargon</li>
-</ul>
-<h3>Go-to-Market</h3>
-<ul>
-<li>**Operator-first strategy.** Win supply before chasing demand</li>
-<li>**US-only for first 18 months.** International scope deferred</li>
-<li>**Mid-market focus:** $15K–$40K bookings, underserved by luxury brokers</li>
-<li>**Target operator:** Part 135, 3–15 aircraft, domestic + Caribbean/Mexico, struggling with utilisation</li>
-<li>**Target customer:** Books 2–6 charters/year, $15K–$45K average trip, digitally comfortable, ages 35–55</li>
-</ul>
-<h3>Key Strategic Insight (from March 2026 overnight analysis)</h3>
-<blockquote>"GoFlight's AI Wingman is more valuable as **industry infrastructure** than as a marketplace feature."</blockquote>
-<p>The recommended pivot: become the <strong>operating system for private charter</strong> — selling AI tools to operators (white-label AI, CRM, utilisation optimisation, pricing intelligence) while building a marketplace as secondary revenue. This increases probability of success from ~15% to ~30-40%. <strong>Jack has not yet acted on this recommendation as of April 10.</strong></p>
-<hr>
-<h2>Business Model</h2>
-<h3>Revenue</h3>
-<ul>
-<li>**3% flat transaction fee** on every booking (earned at booking, retained even if cancelled)</li>
-<li>No hidden fees, no membership</li>
-<li>Average booking: **$35,000** (blended, weighted toward light/mid-size jets)</li>
-<li>Revenue per booking: **$1,050**</li>
-</ul>
-<h3>Payment Flow</h3>
-<ul>
-<li>Customer pays at booking (full amount or deposit)</li>
-<li>Funds held in **escrow** (GoFlight is payment facilitator, not guarantor)</li>
-<li>Operators paid **after services delivered** (24-72 hour hold post-delivery)</li>
-<li>Operator sets cancellation terms (from GoFlight's predefined framework/tiers)</li>
-</ul>
-<h3>Critical Economics Problem</h3>
-<p><strong>Payment processing at 2.5% eats 83% of the 3% take rate</strong> on credit card transactions.</p>
-<ul>
-<li>On a $35K booking: $1,050 revenue − $875 processing = **$175 net**</li>
-<li>**Mitigation:** ACH/wire for transactions >$10K ($5-15 flat fee). With ACH, gross margin rises to ~63-70%</li>
-<li>Break-even requires ~**50 bookings/month** (~$20M GMV/year)</li>
-<li>**This is unsolved as of April 10.** No ACH integration built</li>
-</ul>
-<h3>Revenue Projections (from strategic analysis)</h3>
-<table>
-<tr><td>Scenario</td><td>Monthly Bookings</td><td>Monthly Revenue</td><td>Annual Revenue</td></tr>
-<tr><td>Trickle (Mo 1-6)</td><td>5</td><td>$5,250</td><td>$63K</td></tr>
-<tr><td>Early Traction (Mo 6-12)</td><td>20</td><td>$21,000</td><td>$252K</td></tr>
-<tr><td>Growth (Year 2)</td><td>80</td><td>$84,000</td><td>$1.0M</td></tr>
-<tr><td>Scale (Year 3)</td><td>250</td><td>$262,500</td><td>$3.15M</td></tr>
-</table>
-<h3>Burn Rate (as of April 2026)</h3>
-<p><strong>Known monthly costs:</strong></p>
-<table>
-<tr><td>Item</td><td>Monthly Cost</td></tr>
-<tr><td>AWS (CodeBuild, CodePipeline, Bedrock, misc)</td><td>~$350+</td></tr>
-<tr><td>GitHub Team</td><td>$8</td></tr>
-<tr><td>Microsoft 365 Business Standard</td><td>$30</td></tr>
-<tr><td>Hetzner server (OpenClaw host, CPX31 16GB)</td><td>TBD</td></tr>
-<tr><td>Anthropic API (now pay-as-you-go, crons on Gemma4)</td><td>Reduced, TBD</td></tr>
-<tr><td>ElevenLabs (voice)</td><td>TBD</td></tr>
-<tr><td>OpenClaw</td><td>TBD</td></tr>
-</table>
-<p><strong>Conservative floor:</strong> $600-800/month</p>
-<p><strong>Likely actual:</strong> $800-1,200/month (reduced from $1,200-1,800 after Gemma4 migration)</p>
-<p><strong>One-time costs incurred:</strong></p>
-<ul>
-<li>Stripe Atlas (DE C-Corp): $500</li>
-<li>Aaron Fiser consulting (~5 weeks): ~$1,250</li>
-<li>Telnyx SMS funding: $100</li>
-<li>goflight.ai domain: $1,800 (GoDaddy brokered)</li>
-</ul>
-<p><strong>Revenue to date: $0.</strong> No paying customers. No completed bookings.</p>
-<hr>
-<h2>Product</h2>
-<h3>What It Is</h3>
-<p>A <strong>two-sided marketplace</strong> for private aviation (passenger charter + cargo) with an AI-powered conversational interface (<strong>Wingman</strong>) as the primary interaction layer.</p>
-<h3>Key Features (built, deployed)</h3>
-<ul>
-<li>**Wingman AI** — Conversational interface for trip creation, bid comparison, status checks. Accessible to passengers, operators, and admins (role-scoped). Integrated into trip timeline</li>
-<li>**Trip lifecycle** — Create → bid → compare → book → pay → track → review</li>
-<li>**Operator dashboard** — Fleet management, earnings, capacity listings, empty legs</li>
-<li>**Bid system** — Operators bid on trip requests; passengers compare and accept. Quick-bid and detailed-bid modes</li>
-<li>**Payment** — Full Stripe integration (checkout, escrow, webhooks, refunds). Live keys wired</li>
-<li>**Empty legs / available capacity** — List, detail, post. Operators publish repositioning capacity at discounted rates</li>
-<li>**Omnichannel** — SMS, WhatsApp, Telegram, Voice, Email adapters built (pre-customer)</li>
-<li>**i18n** — 8 languages (EN, NL, DE, AR, PT-BR, ES, FR, JA) across 40 pages × 9 namespaces</li>
-<li>**Unified trip timeline** — Tracking + messaging merged. iMessage-meets-package-tracking UX</li>
-<li>**Reviews** — Two-way (customer ↔ operator), AI-moderated</li>
-<li>**GDPR** — Data rights, cookie policy, acceptable use pages built</li>
-<li>**Trust scores** — Calculated per operator based on activity and reviews</li>
-</ul>
-<h3>Current State (April 2026)</h3>
-<ul>
-<li>**Platform:** Technically complete and deployed across dev/staging/prod</li>
-<li>**Pipeline:** DOWN as of April 7 (DevNerds pipeline not functional)</li>
-<li>**P0 blockers still open:** Google SSO broken, admin login auth issues, notification pipeline never fully working (5+ weeks), api.goflight.io DNS issues</li>
-<li>**Feature freeze:** In effect. No new features until first operator is live</li>
-<li>**Landing page:** Jack's copy live at goflight.ai. Standalone S3 static HTML + CloudFront</li>
-</ul>
-<h3>Technical Metrics</h3>
-<table>
-<tr><td>Metric</td><td>Value</td></tr>
-<tr><td>Lambda microservices</td><td>38</td></tr>
-<tr><td>CI/CD pipelines</td><td>35 (path-based triggers)</td></tr>
-<tr><td>Frontend tests passing</td><td>1,475 (11s runtime)</td></tr>
-<tr><td>Total tasks tracked</td><td>300+</td></tr>
-<tr><td>Completed tasks</td><td>~270+</td></tr>
-<tr><td>DynamoDB tables</td><td>Per-environment (users, trips, bids, tracking, events, tasks)</td></tr>
-<tr><td>Environments</td><td>Dev, Staging, Production (separate S3, CloudFront, API Gateway)</td></tr>
-<tr><td>Commits (March 2026 alone)</td><td>354</td></tr>
-</table>
-<hr>
-<h2>Market & Competition</h2>
-<h3>Market Size</h3>
-<ul>
-<li>Global air charter: **~$30B** (2024), growing 5-8% CAGR</li>
-<li>US on-demand charter (GoFlight's target): **~$4-5B**</li>
-<li>Private jet booking platform sub-market: **$3.5B → $7.2B by 2032** (8.6% CAGR)</li>
-<li>Market currently softening: on-demand hours dropped 5.2% in H1 2024</li>
-</ul>
-<h3>Competitors</h3>
-<table>
-<tr><td>Competitor</td><td>Model</td><td>Key Strength</td><td>Revenue</td><td>Threat Level</td></tr>
-<tr><td>**Avinode**</td><td>B2B SaaS ($5-15K/yr subs)</td><td>1,000+ operator network, platform lock-in</td><td>$30-50M</td><td>HIGH — could add AI layer to existing network overnight</td></tr>
-<tr><td>**XO / Vista**</td><td>B2C + own fleet (360+ aircraft)</td><td>Vertical integration, $3B+ parent revenue</td><td>$500M+</td><td>HIGH — resources dwarf GoFlight</td></tr>
-<tr><td>**Wheels Up**</td><td>Membership + fleet (~170 own)</td><td>Delta Airlines backing, NYSE listed</td><td>~$750M</td><td>MEDIUM — restructuring, massive losses</td></tr>
-<tr><td>**PrivateFly**</td><td>Broker + tech</td><td>Booking Holdings (BKNG) parent, SEO dominance</td><td>Part of BKNG</td><td>MEDIUM</td></tr>
-<tr><td>**Hamilton AI**</td><td>AI-first marketplace</td><td>$10M raised, auto-quote live, email-only weakness</td><td>Pre-revenue</td><td>HIGH — direct competitor, better funded</td></tr>
-<tr><td>**Tivoli**</td><td>Operator marketplace</td><td>~4K operators, 3M txns/yr, AI pricing engine launching May 2026</td><td>Unknown</td><td>HIGH — massive supply advantage</td></tr>
-<tr><td>**FlyHouse**</td><td>AI charter</td><td>Raised $300M</td><td>Unknown</td><td>HIGH</td></tr>
-</table>
-<h3>Differentiation</h3>
-<p><strong>Honest assessment:</strong> GoFlight has <strong>no durable competitive advantage today.</strong> The AI Wingman is replicable in 3-6 months by any funded competitor. The 3% fee is a race to the bottom. The differentiation must come from <strong>network effects and data</strong> — which require operators and bookings that don't yet exist.</p>
-<p><strong>What could differentiate (if executed):</strong></p>
-<ul>
-<li>Operator tools (SaaS + marketplace hybrid) — serve the industry, don't just disrupt it</li>
-<li>Mid-market focus where luxury brokers underserve</li>
-<li>Cargo + passenger on single platform</li>
-<li>Hospitality-first UX vs. transactional competitors</li>
-</ul>
-<h3>Failed Precedents</h3>
-<p>BlackJet, Beacon, JetSmarter — the "Uber for jets" thesis has a poor track record. GoFlight must avoid this pattern.</p>
-<hr>
-<h2>Financials</h2>
-<h3>Funding</h3>
-<ul>
-<li>**Bootstrapped** to date. No external investment</li>
-<li>Jack self-funding from AWS salary (Senior Solutions Architect, 3.5 years)</li>
-<li>**Mercury business banking** opened Feb 26, 2026. IO card + virtual card set up April 2026</li>
-<li>**Seed raise needed:** $500K-$1M for 18-month runway (from strategic analysis)</li>
-<li>**Business dev call with Mercury** scheduled April 14, 2026 — discussing financial setup</li>
-</ul>
-<h3>Key Financial Metrics</h3>
-<ul>
-<li>**Revenue:** $0 (pre-revenue)</li>
-<li>**Customers:** 0</li>
-<li>**Operators on platform:** 0</li>
-<li>**Completed bookings:** 0</li>
-<li>**Monthly burn:** ~$800-1,200 (reduced after Gemma4 migration)</li>
-<li>**Runway:** Indefinite at current burn (funded from salary), but opportunity cost is high</li>
-<li>**CAC estimate (HNWI):** $3,000-5,000 per customer</li>
-<li>**LTV:CAC ratio:** Likely 1-2x (below 3x target)</li>
-</ul>
-<h3>Probability Assessment (from strategic analysis, March 2026)</h3>
-<ul>
-<li>**Probability of reaching $5M ARR in 3 years: 12-18%** (pure marketplace model)</li>
-<li>**With SaaS hybrid pivot: ~30-40%**</li>
-<li>Investment verdict from analysis: "PASS at current stage, NEGOTIATE if team pivots to hybrid SaaS+marketplace"</li>
-</ul>
-<hr>
-<h2>Team & Organisation</h2>
-<h3>Core Team</h3>
-<table>
-<tr><td>Person</td><td>Role</td><td>Status</td></tr>
-<tr><td>**Jack Bradham**</td><td>Founder, product owner, sole operator</td><td>Active. AWS Senior SA by day (2-4h actual work). GoFlight hours: 8am-9pm M-F</td></tr>
-<tr><td>**Adam Hensley**</td><td>Co-founder (business development)</td><td>**Going quiet / parting ways** (decided March 21). Operating agreement never signed. Biz-only access remains via Telegram</td></tr>
-<tr><td>**Aaron Fiser**</td><td>Domain consultant (cargo)</td><td>**Fired March 19.** $1,250 spent, minimal output</td></tr>
-</table>
-<h3>AI Agent Team ("The Nerds")</h3>
-<table>
-<tr><td>Agent</td><td>Role</td><td>Status</td></tr>
-<tr><td>**Velma**</td><td>PA / chief of staff / triage</td><td>Active — runs email, briefings, dispatch</td></tr>
-<tr><td>**Runway**</td><td>Backend developer</td><td>Ad hoc dispatch only</td></tr>
-<tr><td>**Pixel**</td><td>Frontend/design engineer</td><td>Ad hoc dispatch only</td></tr>
-<tr><td>**Lander**</td><td>Infrastructure/ops</td><td>Ad hoc dispatch only</td></tr>
-<tr><td>**Gremlin**</td><td>QA browser bot</td><td>Disabled (pipeline down)</td></tr>
-<tr><td>**Aaron (agent)**</td><td>Factory foreman</td><td>Disabled (pipeline down)</td></tr>
-<tr><td>**Recon**</td><td>Competitive intelligence</td><td>Fri 9am cron (Gemma4)</td></tr>
-<tr><td>**The Bobs**</td><td>Business advisory council</td><td>Mon 9am cron (Gemma4)</td></tr>
-</table>
-<h3>Advisory / Contacts</h3>
-<table>
-<tr><td>Person</td><td>Relationship</td><td>Notes</td></tr>
-<tr><td>**Bryce Cannon**</td><td>Warm operator lead (Vantage Air)</td><td>Email sent March 22. Only warm operator contact identified. Follow-up overdue</td></tr>
-<tr><td>**Wouter Witvoet**</td><td>Hamilton AI founder (competitor)</td><td>Contact: wouter@hamilton.ai, 302-563-3823. $10M raised</td></tr>
-<tr><td>**Kermit Bolick**</td><td>Jack's CPA (Huggins)</td><td>kkbolick@hugginscpa.com</td></tr>
-<tr><td>**Mary Ann Bradham**</td><td>Wife, decision partner</td><td>Math prof at CPCC</td></tr>
-<tr><td>**Jay Harris**</td><td>Best friend, daily sounding board</td><td>Daily 8am call, 20-year friendship</td></tr>
-</table>
-<hr>
-<h2>Technical Architecture</h2>
-<h3>Stack</h3>
-<ul>
-<li>**Frontend:** React (CRA), Jest (1,475 tests, 11s), code splitting, i18n</li>
-<li>**Backend:** Python 3.11 Lambda functions (38 microservices)</li>
-<li>**Database:** DynamoDB (single-table design with GSI indexes)</li>
-<li>**Auth:** AWS Cognito (shared user pool across envs — known issue)</li>
-<li>**Payments:** Stripe (checkout, escrow, webhooks). Secrets in AWS Secrets Manager</li>
-<li>**CDN:** CloudFront (3 distributions: dev, staging, prod)</li>
-<li>**Storage:** S3 (per-environment frontend buckets + data bucket)</li>
-<li>**IaC:** AWS CDK (TypeScript orchestrating Python Lambdas)</li>
-<li>**CI/CD:** GitHub Actions → AWS CodePipeline/CodeBuild. 35 path-based pipelines. Push to main = deploy</li>
-<li>**AI:** Wingman uses LLM APIs (Anthropic/OpenAI). Agent team on ollama/gemma4 (local)</li>
-<li>**Voice:** ElevenLabs (+1 305-363-1121)</li>
-<li>**Hosting (agents):** Hetzner CPX31 (16GB RAM, 4GB swap)</li>
-<li>**Monitoring:** Basic CloudWatch. No alerting for agent failures (known gap)</li>
-</ul>
-<h3>Domains</h3>
-<ul>
-<li>**goflight.ai** — Primary (landing page: S3 static + CloudFront `EJL40ZNQVACMC`)</li>
-<li>**dev.goflight.ai** — Development environment</li>
-<li>**staging.goflight.ai** — Staging environment</li>
-<li>**api.goflight.ai** — API (DNS issues as of March 2026)</li>
-<li>**goflight.io** — 301 redirect to .ai</li>
-<li>**nerds.struktproto.com** — Task board / factory output dashboard</li>
-</ul>
-<h3>Key Infrastructure IDs</h3>
-<ul>
-<li>**AWS Account:** 964242332422</li>
-<li>**Cognito Pool:** us-east-1_Hn15ucGfR</li>
-<li>**Nerd Board API Gateway:** nmv5m59txi</li>
-<li>**Nerd Board Lambda:** nerd-board-api</li>
-<li>**Landing CloudFront:** EJL40ZNQVACMC</li>
-<li>**Event Log:** DynamoDB `goflight-event-log`</li>
-<li>**Task DB:** DynamoDB `goflight-tasks`</li>
-</ul>
-<h3>Deployment Rules (non-negotiable)</h3>
-<ul>
-<li>**CI/CD only** — push to GitHub → pipeline deploys. NEVER manually deploy</li>
-<li>**Straight to main** — no PRs, no feature branches ("we don't do PRs, we straight merge")</li>
-<li>**Dev only** for all current work. Staging/prod configured but not actively tested</li>
-<li>**Feature freeze** in effect until first operator is live</li>
-</ul>
-<hr>
-<h2>Key Decisions & Pivots</h2>
-<h3>Decision: Brand Name (Feb 21, 2026)</h3>
-<p><strong>GoFlight</strong> selected. "Brandon" creative project archived. Domain goflight.io confirmed owned. Later acquired goflight.ai ($1,800 via GoDaddy broker) and made it primary (March 29).</p>
-<h3>Decision: Delaware C-Corp via Stripe Atlas (March 3, 2026)</h3>
-<p>Chose Delaware C-Corp over FL LLC or WY C-Corp. Filed through Stripe Atlas ($500). Entity: <strong>Strukt & Proto, Inc.</strong> EIN: 41-4338471.</p>
-<h3>Decision: Fire Aaron Fiser (March 19, 2026)</h3>
-<p>Domain consultant hired Feb 17 at $1K/month. Output: one batch of domain expertise answers via email in 5 weeks. <strong>Lesson:</strong> Don't hire domain experts before you have users to apply the expertise for.</p>
-<h3>Decision: Part Ways with Adam Hensley (March 21, 2026)</h3>
-<p>Co-founder went quiet after minimal contribution (a few PRs on Feb 27, then silence). Operating agreement was <strong>never signed</strong>. Equity position never formalised. <strong>Lesson:</strong> Formalise governance before building. <strong>Risk:</strong> Cap table ambiguity if an investor asks. <strong>Status as of April 10:</strong> Formal conversation not yet confirmed complete.</p>
-<h3>Decision: Feature Freeze (March 22, 2026)</h3>
-<p>Business review revealed "world-class infrastructure, zero commercial traction." Jack declared feature freeze: no new features until platform works end-to-end and an operator is using it. Factory limited to bug fixes, testing, and landing page polish.</p>
-<h3>Decision: .ai Domain Primary (March 29, 2026)</h3>
-<p>All 125 spec/doc files updated (477 substitutions). goflight.io → goflight.ai 301 redirect. Brand consistency locked.</p>
-<h3>Decision: Migrate Agents to Gemma4 (April 7, 2026)</h3>
-<p>All cron agents moved from Anthropic API to ollama/gemma4 (local, free). Zero Anthropic spend on automated runs. Main Velma session remains on Claude Opus. <strong>Impact:</strong> Significant cost reduction.</p>
-<h3>Decision: Asana Killed (April 2026)</h3>
-<p>Asana abandoned. <code>memory/open-loops.md</code> is the single source of truth for task tracking. DynamoDB <code>goflight-tasks</code> for dev tasks.</p>
-<h3>Pivot Not Yet Taken: SaaS + Marketplace Hybrid</h3>
-<p>The March 2026 strategic analysis recommended pivoting from pure marketplace to a <strong>hybrid SaaS + marketplace</strong> model — selling AI tools to operators while building the marketplace as secondary revenue. This would increase success probability from ~15% to ~30-40%. <strong>Jack has not acted on this recommendation.</strong> It remains the single most important strategic decision pending.</p>
-<hr>
-<h2>Current Status & Next 90 Days</h2>
-<h3>Where We Are (April 10, 2026)</h3>
-<ul>
-<li>**Product:** Complete but not commercially used. Pipeline down. Feature freeze active</li>
-<li>**Business:** Zero revenue, zero operators, zero bookings. One warm lead (Bryce Cannon, stale)</li>
-<li>**Burn:** ~$800-1,200/month, self-funded from AWS salary</li>
-<li>**Team:** Jack only (Adam departing, no employees)</li>
-<li>**Immediate focus:** Mercury banking setup (call Apr 14), Geneva EBACE trip planning (June 2-4), AWS cost optimisation</li>
-</ul>
-<h3>Active Priorities</h3>
-<p>1. <strong>Geneva EBACE trip</strong> (June 2-4) — Jack + Mary Ann. Budget ~$4,770-6,070. Not yet booked. This is the next major operator acquisition opportunity (25K+ attendees at NBAA-BACE, EBACE is the European equivalent)</p>
-<p>2. <strong>CodeBuild + CodePipeline cost optimisation</strong> — Reduce AWS CI/CD spend</p>
-<p>3. <strong>Mercury financial setup</strong> — Call with Jade Mercury on April 14</p>
-<p>4. <strong>Pipeline repair</strong> — DevNerds pipeline down since April 7</p>
-<h3>Next 90 Days (April–July 2026)</h3>
-<ul>
-<li>**April:** Fix pipeline, reduce AWS costs, complete Mercury banking setup</li>
-<li>**May:** TBD — Tivoli launches AI pricing engine (competitive pressure)</li>
-<li>**June 2-4:** EBACE Geneva — primary operator acquisition event</li>
-<li>**Target:** 10 active operators, 3 completed bookings by end of Q2 (ambitious, not on current trajectory)</li>
-<li>**NBAA-BACE October 2026:** 25K attendees, target for scaled operator outreach</li>
-</ul>
-<hr>
-<h2>Open Questions & Risks</h2>
-<h3>Unresolved Questions</h3>
-<ul>
-<li>**Cap table:** Adam's equity position never formalised. Operating agreement never signed. Must resolve before any investor conversation. **URGENT**</li>
-<li>**SaaS pivot:** Should GoFlight add operator SaaS tools alongside marketplace? Strategic analysis says yes. Jack hasn't decided. **HIGH IMPACT**</li>
-<li>**Payment processing:** ACH/wire integration needed for economic viability. Not built. **CRITICAL**</li>
-<li>**Take rate:** 3% may be unsustainable after payment processing. Should it be 4-5%? Add operator SaaS subscription? **TBD**</li>
-<li>**Burn rate accuracy:** Hetzner, ElevenLabs, and Anthropic actual costs still unconfirmed as of April 10</li>
-<li>**Pipeline repair:** DevNerds pipeline down. No timeline for fix</li>
-<li>**Notification system:** Has never worked reliably (5+ weeks of attempts across Twilio, Telnyx). Table-stakes for a booking platform</li>
-</ul>
-<h3>Risks</h3>
-<table>
-<tr><td>Risk</td><td>Severity</td><td>Likelihood</td><td>Mitigation</td></tr>
-<tr><td>**Cold-start marketplace failure** (no operators → no customers → no operators)</td><td>CRITICAL</td><td>HIGH</td><td>Operator-first GTM, EBACE networking, Bryce Cannon relationship</td></tr>
-<tr><td>**Hamilton AI / Tivoli competition**</td><td>HIGH</td><td>HIGH</td><td>Speed to market, differentiated UX, mid-market focus</td></tr>
-<tr><td>**Solo founder burnout**</td><td>HIGH</td><td>MEDIUM</td><td>ADHD management, AWS salary as safety net, Velma scaffolding</td></tr>
-<tr><td>**Cap table ambiguity**</td><td>HIGH</td><td>HIGH</td><td>Legal resolution with Adam required before any raise</td></tr>
-<tr><td>**Payment economics**</td><td>HIGH</td><td>HIGH</td><td>ACH/wire integration, potential take-rate increase</td></tr>
-<tr><td>**Agent infrastructure fragility**</td><td>MEDIUM</td><td>HIGH</td><td>Gemma4 migration reduced costs; reliability still unmonitored</td></tr>
-<tr><td>**Feature creep resumption**</td><td>MEDIUM</td><td>MEDIUM</td><td>Feature freeze enforced by Velma</td></tr>
-<tr><td>**AWS day-job distraction**</td><td>MEDIUM</td><td>HIGH</td><td>Jack works 2-4h actual; GoFlight hours 8am-9pm M-F</td></tr>
-</table>
-<h3>Probability of Success</h3>
-<p>Per the March 2026 strategic analysis:</p>
-<ul>
-<li>**Pure marketplace model: 12-18%** chance of reaching $5M ARR in 3 years</li>
-<li>**Hybrid SaaS + marketplace: 30-40%**</li>
-<li>Investment verdict: "PASS at current stage, NEGOTIATE if team pivots"</li>
-</ul>
-<hr>
-<h2>Reference Data</h2>
-<h3>Entity</h3>
-<ul>
-<li>**Company:** Strukt & Proto, Inc.</li>
-<li>**Type:** Delaware C-Corp (Stripe Atlas)</li>
-<li>**EIN:** 41-4338471</li>
-<li>**Banking:** Mercury (IO card + virtual card, set up April 2026)</li>
-</ul>
-<h3>Domains</h3>
-<ul>
-<li>goflight.ai (primary)</li>
-<li>goflight.io (301 → .ai)</li>
-<li>dev.goflight.ai / staging.goflight.ai / api.goflight.ai</li>
-<li>nerds.struktproto.com (internal task board)</li>
-<li>docs.goflight.io (documentation site)</li>
-</ul>
-<h3>Contact</h3>
-<ul>
-<li>**Jack Bradham:** jack@goflight.ai (M365), +1 704-578-5942</li>
-<li>**Velma (AI):** velma@goflight.ai (M365)</li>
-<li>**Wingman voice:** +1 305-363-1121 (ElevenLabs)</li>
-</ul>
-<h3>AWS</h3>
-<ul>
-<li>**Account:** 964242332422</li>
-<li>**Region:** us-east-1</li>
-<li>**IAM (Velma):** velma-ai-assistant (read-only)</li>
-</ul>
-<h3>Industry Events</h3>
-<ul>
-<li>**NBAA SDC Cleveland:** March 24-26, 2026 — ATTENDED</li>
-<li>**EBACE Geneva:** June 2-4, 2026 — PLANNING</li>
-<li>**NBAA-BACE:** October 2026 — TARGET (25K attendees)</li>
-<li>**SDC Fort Lauderdale:** February 2027 — BACKUP</li>
-</ul>
-<h3>Key Competitors to Monitor</h3>
-<ul>
-<li>Hamilton AI (wouter@hamilton.ai) — AI-first, $10M raised</li>
-<li>Tivoli — 4K operators, AI pricing engine May 2026</li>
-<li>Avinode — 1,000+ operators, expanding into payments/analytics</li>
-<li>FlyHouse — $300M raised</li>
-</ul>
-<hr>
-<p>*This document is the single source of truth for GoFlight company context. Update when decisions are made, metrics change, or milestones are hit. Designed for LLM context injection and human pitch prep.*</p>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="content-wrapper">
+                <!-- HERO -->
+                <section class="hero" id="hero">
+                    <div class="hero-logo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAABCCAYAAACW0CknAAABWGlDQ1BJQ0MgUHJvZmlsZQAAeJx9kLFLw1AQxr9WpaB1EB0cHDKJQ5SSCro4tBVEcQhVweqUvqapkMZHkiIFN/+Bgv+BCs5uFoc6OjgIopPo5uSk4KLleS+JpCJ6j+N+fO+74zggOW5wbvcDqDu+W1zKK5ulLSX1jAS9IAzm8Zyur0r+rj/j/T703k7LWb///43Biukxqp+UGcZdH0ioxPqezyXvE4+5tBRxS7IV8onkcsjngWe9WCC+JlZYzagQvxCr5R7d6uG63WDRDnL7tOlsrMk5lBNYxA48cNgw0IQCHdk//LOBv4BdcjfhUp+FGnzqyZEiJ5jEy3DAMAOVWEOGUpN3ju53F91PjbWDJ2ChI4S4iLWVDnA2Rydrx9rUPDAyBFy1ueEagdRHmaxWgddTYLgEjN5Qz7ZXzWrh9uk8MPAoxNskkDoEui0hPo6E6B5T8wNw6XwBA6diE8HYWhMAACqmSURBVHic7Z17mBxlne8/v/etqu6eSWYmVxKSkETAgCCIZBcUEkIAucjqA7i7xwsrsh7ZXcUL4spNIKBwWI/P4+45qMuyInoWEMWgqLAeAkGRq7iChHskCSE3kkwmc+2qet/f+aO6Ot1zSSakJ3C0vzwDM011vZeq9/v+7q+oKk000UQTjYB5ozvQRBNN/PGgSShNNNFEw9AklCaaaKJhaBJKE0000TA0CaWJJppoGJqE0kQTTTQMTUJpookmGoYmoTTRRBMNQ5NQmmiiiYahSShNNNFEwzAmhPLYY4/p+eefrwceeKCKyB79GGPUWqvWWjXGVD8vlUo6adIkPeecc/Shhx5q5g800cSbANLoXJ5rr71Wr7zySpIkodH3FhGA6n1FBFXFGMOll17KVVddJQ1tsIkmmtgtNJRQrrvuOr3kkkvw3mc3ryz4PcHge9T+ba3Fe18llQsuuICvfvWrbziprFu3TtevX8/WrVsJw5CZM2cyefJkOjo63vC+7Sm6FG0XGjqO51/xunmTw5sQTLZhGATRbo45YvyQtrr60PaW+j5sHUAnFhvbr9eL5f+1WR2tQBHvhMCCaC+zZrSy/z5vjj6OFRpGKE8++aTOnz+fNE0BCIKg+vueQkSq0glQJawcxhi890RRxNKlSznttNP26kN7+umnddmyZdx+++089thj1f557+sIcPbs2SxevJgzzzyT008//f+LF+sr/+sp7ewqMYCgRkBcZUwgSg3ZKyDs0KJ3PCP1FkOADQDXQxBs551HzuK0k2biEvjhD1bwf+9fw/aBFnwUomIIvRD4ddzynTNoZ8ci3NSFXn/jvWzv34fYj8NIjLVlimEPC951MMe+awLt9o1btC91ohdf8WO6ukuIbUPVYikT2W2875R3cNZfzKQj/OMllaBRN7rhhhvqFlCaptWF3ggMd5+8Le89xhjiOOarX/0qp512WkPa3BVWrFihF154IcuWLSNJEqy1OOfqVLFaaWr16tV897vf5aabbmLOnDn6xS9+kb/7u797U79cK1+J2bAlpC9RvBW8zcblUsXgUSMYzchE1JATiYonJxdRMKoERknTmDDsZ9qslAQIQ+j3Ed2unTjYB29LxOWUghFaAsU5wO7oT2Lgyec20+fbiV2AmBQjPYSynTn7l/FvsJvBBtDdVyC2+xK7cViJMNpH4hQ1E/6oyQQaaJT9yU9+MkQ9Ga30Y232xgTB8Pw20n1qP88JZ/ny5aNqc0/x0Y9+VN/+9rdzzz33VPvhnKv2K58LVa0STRiG1WtWrVrF3//93zNv3jxdsWLFm9aonKglliJOCpiwjdSVKLsiYtuIpZVECpRNkZQSqRRQApwEpFIglgJ9aQFvSsRA7AWVceDGIakhJJNrvHUkxpCYiMSB2AiPBeexg/YRByQUSYiIg4huAwPFVvol64/ZzeXaR1dD5z5UEBI8irMh/alHrcXYCOfGnku6sil9w9AwCWXTpk045+qkktEQSr7Y7r33Xk444QR54IEH9Oqrr2bZsmWN6lpDsXLlSj3zzDN59tlnAQjDkCRJCIIA51x1zPl/a6WUJEnq1DdV5YUXXuDoo4/m5ptv1jPPPPNNt3uFhRbKqYItEKeCI8Rg8E6xNiRBUDEgBuvBE6NAIgGKwRZCUvUoMcYI4i1KAF7Ag1S3tADUkO9xCnhR2gfv6AKps6gJEQrYICBJegikRGBLderRaNBCe0PnXCqqoBeDRwhbCiRxTJBSp7Y3Ek+u7tLfP1vG6zhiP0AUiPpkgBYbc8K7ZzOpfe9JRQ0jlDiO6/7OF9KuSMU5x5IlSzjhhBME4LjjjpMkSfS+++5ruJdoT7FixQpdvHgxmzZtqn6Wk0mu4g02IA9W1Yabk56eHv7qr/6K73//+3rWWWe9qUgldWWMDYidA4EoinBpgmiZNE6wQQtaIRMB0AAVUAwqQuw8gYCREBWPJ8Fbh0QGDEwACVxBjetHEIx4vICKQxmq5voUAomIncFKBP2KRTEMIImjga/064MAWsBgMUB/fz9txQKhFFDXGPV/MNasjrn9h/9FbzIBTIgVCGSASNdz5NtmM6l9TJodFg2d/cE2k9EQgjGGyy+/vG4RnXjiiXLsscfqr371q0Z2b4+wadMmPeOMM9i0adMQg3OaplVJC7JF571n3333pbOzk+7ubsIwJE3TujmpJV3vPeeccw7z5s3TQw899E1DKiIWFYPYbMdN4jJR4DHax7iSEqddCB4RMFpZT0qmzqghCELUJRhJKQSGWAcIdBtGi4ifAQaM3/EaZmSieM1+3xajHdGOHbYQgrptGMajzlOwEYHEeL+NUHqBwt6fpBpkZBqAz0SVKAqIkx4KmmJlbAw8Xd2GVCaRmElgSpS9Q5Me2sMENyYtjoyGEkqtmD9aY+zxxx8/7Oe5XeXNgo9+9KO8+OKLiMiwBmfvPQcddBCf+9znWLx4MQcccEB1Eaxfv14feeQRrr/++qoqV/v9/Pfe3l4+9KEP8dRTT+3l0Y0M9QbvDd6DGiUMLT7ppmC7uOaKY4gErICtiPq5zcOZbHG5BKIQvM9+JAARaCtCh8mIwouvLERFM3rCiEExyKA3NLRwwJwQF1nK5T7EbUekTBh4Ojr6gIl7eYbq4RUyw7RHxOM0IQxSxDmcT4BSw9t8bUs/vS6lH0dgldQrYXEc/emWSn/2HsaEUHZHVRmJeI4//vi9ZmDdFW644Qa95557qn/XSiMiQmtrKzfccAMf/OAHh5Uspk+fLmeccQZnnHEG99xzj37sYx9jw4YNVbuL9756z2eeeYalS5fqGWec8aaQUozJGEACi6KUy2VaQ2gNE2ZOgX2CPdfPNZdKqJFQAB3m1pOLyBVfOlMTk10bAmhGUm+wsgNULKKSSWxWFCeCquAF3C6mqgt0d21AL2xAH37iZRLaCEst9PfHBDYkxVIIW4j38lvUsGeQGxvzQDOoX3i7i1pPyRuNr33ta8AOSaJ2TDNmzGDp0qXMnz9/VI/ulFNOkZ///Of63ve+l/Xr11c/z+8ZBAFr1659Xf1ctWqVvvTSS6xcuZLXXnsNYwyzZ89m7ty5HHjggUyZMmW3X680HUBMQOoUbEAURajrxkpKoUEvq2IAqRJLDlHN3DqDNAUj4FIwFlKf/e3JiGm0fsvOFO3vhzVr4NUNCVt6YmwQMWFcyNzZMHsmTKwhyy0J6g2kCQQBOAfTCkMXvwMwHtHMQC8+QIkIiuNITcRmRScLsiFBX3gJ1q9Xunv7EVUmT2ll9n7ovlNgarRzYnlxI/r8H+COHz9HZ89ElFYG+lKKYQFrQwYGYmIb0pPChjJqLKBQsKAD0NEyNobahhFKbgvISUBERkUmI0kojYpf2VN861vf0hdffBFgSASwMYbbb7991GSS44gjjpDvfe97evLJJ+Ocw1pLFEV8+tOf5vzzz2fGjBm7db/vfOc7+u///u88/PDDQzxteV/Hjx/Pqaeeqp/61KdYsGDBqO8fRgFxGhOE40i8Q0yAqsPHZToaFECW30Qqkgb4qj1msJdn43b0k5//V2KmUU4LhNbgkx7CYj/vP+0ozn3/ATttq0uzhXjf8j/w6OPPkcQGCcexPQXUUAoMPu5kzr7jOP7YQ/WDp02QtZ3oZy+5nd6kBL4E4gmCmCBZq0u/XR9HJAKIB83URBuEeOfo6fdoUKAs8G8/26DLlq1ga5ch0QAjlsAouAHE9jF31gROOe4Iff9xrcPO7+13r9Zb7vwNfclUym4S3raTKhQKIT5JcWmKtQFiW7jsf/yKULqz8AVRbBpzyNwJXPel4U0Ne4qGSom1EkWtZJG7Vgd7fowxI5KOtbZ6XW4Eze+/J5LP7uLmm28G6vOI8n5ddNFFvOtd73pdi+qEE06QU089VX/5y19y4YUX8g//8A9MmjRpt+5111136dlnn01vb2/VrpP3MUdO7t3d3fzwhz/k9ttv593vfrfeeuut7Lfffrtsr1wuUyh0UE6z4MEkSSgZg0jjJEdRMD6zxeSOHYPHDOPlSQXKTKbPT8HLePoHEsaVphInW0mSndtPNvWj/3bzWn71yEsQTGTAzSZRh9GI2AaIQpoqIe2s2qR85/bnePTxyfqRjx5Idzwri7VJLWEYMpCWKYmwaRs6tWMH6YlU7E4aYKRAnJQpFAw+jejshav+x0bWvLyagXgSzhSJVYmiAnFcxqCoS3nxlZQ1332Kxx6bqH//sXnMnFxPqs5E9LrJ9DGNxBTBWjCOVGMKgSVNHWI8sbOkOoUgnEKaQiEUNO1hezJ2yuGYq521wVz5rpkThPeeUml4I1WuQhlj6shkuN13rLB582Z94okngB0LM2+zpaWFz372s3t0/+uvv35Ui3o4fO5zn9N//ud/rs4JMCT+J5+/XArKpZdHHnmEI444ghtvvHGXtppSsYV0S4pTMCYiCBXxQqKNzOupPE+taCxSkVaGuTIRSKVEynhS2jAFoV9jRBPUjBuxhRc3ol//xiOsXBvQ72fgfStODBoqsaZ4MVhjMSgJniRVQtPCc2tjvvbNjfSmHagpYIKIvlSx4XjKbvsQL4pRsngazZ5JsRBRjnspBEV+sexFQgF1ExFTIvUg1lBOFUuRxDtsZOlLBxhIU554rof/9W9PcfEFh2lHjXqVYklcAbHjUTK7jXoP3uGoPH9VJAhxfjxODWoFnziKQYCTsZP+xzxQOUmS6otura2TSowxLFiwYNjvHXXUUXWLIUetjWas7SsPPPBANRgtby8nluOPP/512SRq8XrJ5C//8i/1X/7lX4bMQz5PtcSXz3UtqXvv6ezs5KyzzuL7P7htp5OYJA4RSxQU0DQzIHsENRFJo2woxmU/AiCglp29mh5wknmSUhsyoJAaSzoCt21M0H/+xm9ZuTqgz48nDgqUURIDaeIw3mIUXFomdQOoxKhVyl7ocSErX90GpTZcEBAbh4ZC4i1ICT/SHEjm6UmSMkYCUh+gFEi9INaiXrBi8XFCoIJ6SxC10l+OSYOAuNhCN208tqKX79/ZN2jCLJGxSBpj04RQPSGGQAKMGkITgQfjKq585whIsdJPECSo9u72Mxot9krmQx5Sn3s0VJUTTzyRe++9ly996UvDPpL3vOc9kqapXH311dUI1EJhR4xBviuPJR5++OFqRnNtlKO1lo985CNj3v5w+PKXv6x33HFHtU+1UlptHpGIVOfdGDNkvnJy/Nu//Vt+99R/jUgqxmTSAj7NMoBFiFNFogn0lqGzAaHeSh6/UQmgFRjNq6kYEu9wAmIFP8IG8+2bX+SFVQP0+3a8ySSTFEcUOCIzQGS6KOlm2sJttAadGLZgTQ9RARIvFNomUnYeh5CqR2yA04oReASIZn4qYwGjmU1DBCMJoYkxupWQzbQVugjcFkIZwJX7KBYjUu9IjaFsSlDYl5/93yd5ZeuOeQ4kJpQtlMwWWm0XJelH0jLGCd4L1oZYBONjQu2mxXYSunUU2Yj167Bm2248nd3DXvG05UFgxhgWLlzIFVdcwaJFi0a1v1122WVy2WWXcdVVV+mVV14J7Jn3aHewefPmOvcwUN31Z8+evcvvP/3003rxxRdXpazchpSTQW6TCIKg7nPvPcVikS9+8YscddRR1Xlavny5XnnllUMkk1ob05w5c3jf+97H3Llz6e3t5fnnn+dHP/oRPT09dQF5OfH09vTxgbP+Gy+9+PywYxDjQSoeCwkRLNgSfWVh6c/AqMdS1nx1eVEQj9EsEM4RoiKIiymZ7Sx452TeNrc+48aL4DE4QyVpWVH8sExlFKy3WG9JxWZt2SxBUSQBorrrH3oBXf7QGlwwG6etxD7GhEpJwA10UrLdjA/LvGW/CRz81rl4DE8/v4o/rN7K9oEejO2gXO7PbDqSeWzSxIG1KOmwelnV2SQpaVomKATE5V4icRS1l6L0cdDbp3HQQfvR19/N8y9uYO3afjp7DS6xFIKIPpdJhgPOEFLg0Sf6mHVSCwBTJnne9c42BhKLZzyvbRFWru0nMS2kieBSxadKIRrg0ANLtLUKmiaENlPF9pvWsvMXdw+wVwjFWsuCBQu4/PLLOf7441+XoHz55ZfL5ZdfzhVXXKFXXXXVXnEpb9iwofp7rd1GRJg2bdqovn/33XdX+zm4nEEtSeW2odow/rPPPrvuftdccw3OuSHEkF+/ZMkSLrvssiHze9111+lHPvKRIUF1NsziYFaufIHvfPtmPefcjw75bprGGA3BBHiF1DsCG1FOlB/9bAWWMlJjPHWSZRzn/041QKxB0gEmFLez75S387a5U+ob0R1ZyfkTHY2Wb1Qx1qDOo5oQDvNmPfDgJlKZwoAWGHCOqBCB9iO+n/biAMf9+RzO+dBM9q2ppdLJ4bqlC7510ys8tuI18J7AFCvRuwbvUmxgkZ0KZ5rZhIIQ1BBZJfK9dIzr59IvLGTf6VnUbztF2apT9PEn4Js3/oat/REOIYpKeK+IsWAinn1hNZx0MAAnzp8hJ86fwTaPOoW7l8HqH66gP04RU8CEAUqCpZ9zPzKPudNgYsUjt82jeUDhWGDM9QZrLb/4xS+4//775fWSSS2WLFkiqioLFy5sRPd2is7Ozjq1AXaoCnPnzt3lWHJpJrdbGGOqJDLY45V/nhNF7s3K8cwzz+h9991XvSb/f7l6c/HFFw9LJgDTpk2TH/zgBxx55JFVFQ7ApSlZVBh84xv/e9gxWFvAe8GnusNI7pQgaiXWiFjGEZP/tOH8BJyfhHcdqG8DMw6Rcagfx0BZKlRTj8AbrBeMSmWRehCPH8Z46CWzuSAuk06cYhzYVLCDahes3Y4++MizxL5EaiAqRcTlBOOVQPs4Zv4cPnlOPZlAll90QDvy2f8+i8P3b6WoPfh4AJ8qqMHaEONTcElmhK3tH4CaSpKgwco4BvqyPILA9nPR5xfwjv2QqSGSB7FNFOTod8J5H5tPSzCA9Y6Cgk0c4lPipJ9NnV10unoG6zDIJIsUCwM434dYSDVlIO4n1QSxAwR+B5nk3xn2QTcIY04oaZrK4sWLGz6I5cuXy1hlb+YYP378kKS/XD1Zt27dLsWjWttFLhXkUkhtnE0es5MvWNhBFDluuOGGOmN27fUf+MAH+PKXv7zTyZgwYYL86Ec/oq2trb5gVUU+/80Tv+E3jz0xZEy5RGQkyGqgmIBUIU49Ygs4QlIJ8RLiKeCJUC3gKOG1hE8jXGoRyQytYsIhfVPxFa+OZkbEqpfEsG3QIqoE66M1wWzW2myRU5+usWkTJC4iIcCEEX39vRQLEcaVmT7BcN45+9C+kwU2sxU575x5FM12SlYIbVhRTdPK/O1Mjsom1iWeYlRCSJk+qZUD5gx/dbtBjnwHFMIEUcXHCaHJ1GRjAzZv6YKRslFML15TBItYgwkNhJY0TfZ69HDDCGU4FWSsDaeTJk0a0/vPmDEDqC9BkC/qV199dZffzwkklwpyaSdN07raL7UkUks0bW1t1d9/97vfEYZh9braNj784Q+Pajz77befHHvssUOyoq3NVI1nnh1qR3HOZXYRo6ipGCXFoiqIF1Q8zijOKF5SvElRUbIcYJsZCVGMDiAmJXZBXc2OLlBX8fKIekQF6wWrBqMjvT+m4gmyxJpk7TuPG5TN++r6fspqkbCIpo6CMUhapmD7eevs1lGlDUyfDFMnGNQniFfwCYE1qBgclnTwIheq2dYg4GMCiTGul8Pe/hZ0JxxUCGHOnFmIyUpg4sGrAQlJR3QnZbEv4gMMEXjBe0AsIgaSXY2wsWjYih+ctm+MGbFgUi2WL18+7E7/4IMP7lICGOsEwkmTJlEoFIYYMgFeeeWVUd0jN7Jaa6uG0zy2BqBYLFaLL8EOj5i1tkpoAOvWrSNJkuo9a4P8Dj/88FGP6ZhjjqkjLVNJ4LM2ZOXKlUOuL5VKFXcxWJv1rRgarPZRsL0U6KTEJopspCQbKbGeoqynIOspyEbaok5KbKQgGxkf9RCYgSE1S4b1lmRx+EOicU0lCRGy5MHARpm0YEweZltFT09PlaxzSQs8VhwHHzRrVPM1KUDmHTAzcycbqW4OmQo7/Pvn8xIMgDECkmJNShTsXOVoN0gQGozJpDaVzNbtKomSI8FgMtWrJhPQOQdqGMUSbCjGpLlcnK4V2R988EGN45gHH3yQ++67D+89Dz/88JDcmByXXHIJDz30kC5cuJDjjjuuam9YtGhR1bA71uH58+fPp1wuV9Wc2gCxW265hTPPPHOn3z/ppJNkV338+Mc/rjfddFOVLHLpJU1TOjo6qtetXr26ruRlTirTp09nzpw5o9b9jj766Dp1yqeKYLCEvPLy6iHX+zjFUETU4lKPaIzTPtpLZT541hG0BGDoHxrVqkHmvfGewCiWMvhuDt+/o+6ydhDrQoVs11d0R2zHMFuK9WRh7dW/7Y5CTYPWnKYp6lKcJkiQuYpxnhCh1NI62ikjLARIKJRx1YZEwTolGM7ZKD6T3MRVasCkYGRUG2wQBJk06H0lAM1gK9nYI8G4zLPlKINUIo6dw4ZCOrZWgSEYE0LJF38l3F5fT1mDBx98EFXl/vvvZ/ny5dWd/uqrr0ZV9aSTTuK1114bi+5XsXDhwmraQL4Ac9vF3Xff3ZA2NmzYUEe8eXttbW1Mnjy5JqR7R3xJbeGm3VUra19qVSF7BQwOl+2mg5Abk9NUEYFiGJCUYwLp4dQTYB+DjC4lvwR0DPt/MptJRX2SbIc3ajJVawRkCxXEe4xXjBmqcre1jyMMDJqm2DDCOSUsREDIsy+t5f3HzBxFv+Gll9chYStxkmClSGAsxqdIxZMzHHzF9S1GcS4BdFTpCtnjVBSHqqAmIyd2Et0qzlYkX3AVlTQ7NUBxezm3tqE2lMHn5tSSRy4q5p6O2oUwnNpTG/2Z78q5WgBw7733NqrrI2LmzJly+OGHDyndp6r09fWxZMmSPX5cjz76aFXyEZGqpLJ48eK66+bOnVttu7Y/a9asYfXq1aPuxwMPPFC9T/7ygkdJmT17qBogQVbTw5sYlRRVRzEyqOvDNurtEQ+imapg0owsKrv8cMgWmWbGXKmkHmgwxEY6bZ/xmYQkBpwHn/XfeeGZlevZPIqgvLXd6KvrBrIoXEmr72I+f4O9PJUeUk0nqHlWoxEWjIBmAfSZLaWSgiA7DZEwiAQIQUZCmhuEHeFeLivUUBvKYBdoLcnUhn7ncRd5CPtwQW6LFy+uy1i21lYPD8uNinsjWvacc84ZdmzGGK655hoee+yx100q1113nW7duhWgGg2ce4YGq1PTp08fIiXlfz/++OOjbvPRRx+t2re8ZjufmhTFMfeAuUOudwKpKGpsVrEtrUhG4kZ0OuwxKmQyLKFUvDwZFG9yN3PKYHFhn2lgJSUKFOMdooY09STesm5Twt3377orP/lZTF86Dudt5u2q2CqMzWh4eFupYHSHsWS3vZFa2XTJEqUy0pKRF6vNJH/1Wbg/3mUkisE15iSbUWNMV2StaJ4bUK211XKIixYt4r777ht2tpctWyaLFi2qfmeHUW2H5LM3Shx88pOflAMPPBCoVztUlTiO+Zu/+RtWrly526Ry880365IlS+oSJiEbU6FQ4NRTT627/uijj66SyOCQ+1tvvXVUba5atUofeughvPeZUVgke1tVKRSLHHLIIXXXdymqNkJN5h72EmGDIp7MptRoadooVbdxtiszxG1coTOkalTwOBOD9IPU1zUe3wZHHr4/RgcwCqEUicJWJGinq28c3/v+o9x6H9o1aChbHboxRr/9s0R/uuwZYu1AGYfVEINgKwWgUtEsurcWleRAUYv1AZIajIYYAtTvmoIVQTT7MRpk5TE1+xnpbY9aLV4Upw4bKGJcxVNUYsO6XTbZUIwpoeQqDuzYVZ1zVZvEcccdt9PvX3755dX7AHUp+mMdg1KLz3/+81XD7OCAtOeff54FCxZw//33j3p9fepTn9Jzzz2X/v5+gDqvjzGGj3/843X2E8hKUNYmRtbmFy1dupQvfelLO22/q6tLzzrrLDZv3rzjQ9VK7VM4/LBDOeLId9a12S6IS8GlUpFQDHElUC+LpRntiHeNimca63f8iDJszZU8E1nYQfJ+mHzCDkEWL5iO9RsJtYx6h3eQJJZCaR96yu3c+B+PcMk1z/Ovd2zWZU+iy36P/uCnW7jqf67g1jsepydpxWkJ9RbnlMCAqid1MWLMCBJKxeui2Ya6g/pG94po/ly8QoVgdobWcUIQeiDNPESqWfi9Rrz8qqcr2XtHazTMKDtlypSqkTQ3vg6Oqxhcp+PKK6/k+uuv3+Vga6WC4Y7oyAPFcvdso3HeeefJbbfdpsuXLx8SkKaqvPbaa5x00kmcfvrpev7551cr+A/GnXfeqV/72teq3q3a++SYNGlSlUhrMW/ePDn99NP1pz/96bBlHL7yla9QKpX0kksuGdJ2V1eXvu997+O3v/3tkL5Tic+64DOfHXbs6hylQoGe/oQoikA9Ii4LyW/QdhTaTJXwaYpEBotUNiPYNoB21ESyagqBsUiiBMaQJClhWCD2kMjQZ3/4QXDkoeN5/PedGEJSDNYUSBPFaxt9WuSpl8s8+4c1qH8BseAkQH0rXqaSSogJLWlSJgyzgtvWKN6A8wnxIC+PAiKZ/UMrNhuM4lw6KqOsr/yTJTt6XKpIJT0p3XF2Wh0OeAuUk06CcBKpV7wXQmNxWmTpf/6OWfu/k/lHoCHs9jEju4uGEcp73vMebrvtNpxzdQl1u8q32ZWnZrgQ9cGRq7VHeLz1rW/dk2GMiEphIlatWlVX5T73ygD8+Mc/5ic/+Qnt7e16wAEHMHPmTIwxrFq1ipdffpnOzs4hRaIGF5m67rrrhkgnOb7whS9wzz331FXcj6KoOv5LL72UG264QU855RTmzp1LkiQ899xzLF26lIGBgTqjed6PIIB5B76Vv/rQh4dtMwos5XK5EoOSGUGzmqky5FS/14skKQOZqpciOE2zyFo1dAwKi7cWktRnRbMRgiBCfYpImNWEHISpReS8vz1SV115Pxs7t6A6EY9gTYizBZwUSLWF1LdiA0VNni5hCE1IGBhS9VXngACpV1BLEEYUi/XtZeYOT1qRztUEqKaIgA5vwa2iS9EwyhIevc/OJQnDkDhJsnyoEb5XDGDG1FZWb9qOyDhCacmyttXSq6189RuP8raD2tlvWgv7ThinRdvNWSfPHhNiaRihnH/++VVdfrRn8sCuVZfBpQOAugUYx3E1bsNay6WXXvo6er9rTJkyRe644w5dtGgRXV1d1c9rg81yoti2bRtPPPEETzzxRGXRBkOKRA0uOgWwZMkSPvaxj404IQsXLpRrr71W//Ef/7E6LzmZ5Mbc1atXc+ONN9apR4Oxg8ygdXwrt91+24jjVjyBVRyCSxOiwJAmKbZYpGHCoHjUWGIvxN4jJsj6qJYtMTqppr5q4jM7io1asqNIXW7IDvDp8FXl39KG/N3Hj9d//fYyNm0RvBiSpIwNCjilckSIIfauSrYF4xEtkwxkCX4SBKRpVuDWmojUG1xs8TEwiFRQA8bivODVIMZgjEXTnWfItwvinFPvwEQBSWpJnVIMizinI0qEEwyy4Mh5uuU/XyCmjQGvJNZjIkufDwjo4LHfd/H0M50UNGX/WZazTt51tvzrQcNsKEcddZRcdNFFVffwaDOBc+IZ6SfHYJc0UBfKDnDSSSfx4Q8Pv9M2Aocddpj8+te/Zt68eXWkVut1yvtS3dEq2cC1f9fG5eTj+MxnPjPkfKLhcOGFF8pf//Vf17UN2bzUSi55W7U2pyAI6tpXFW769nc59JAjRmw3NEKaDGA1K7wseCIbDDnYbU8gVnAuQdVV+5h7vQbHggURpGmC4hCvWFOxV6SOyEbD3h/g+Lchl3/xBA6cJZTsJloLXfhkE4HvISImsimRcViTEmiZQHspSDcTx8dMbM/IxRhBxeI0m8swCIa4Za3JNhmDImQ2F1HwLiUcTdiqd0ShzdzEPsUGmXfHJ7rT1KGzTp/MrMkem2wl0DKhyd4H7wwirUiwD95MJ7VT6YkHM2Dj0FCj7Fe+8hW54IIL6uJFGoFacql1FdcuoLPPPptbbrmloe0Oh4MPPlgeeugh3v/+99dl/EK9tFGbNQz1UlWtDWTChAnceOONfP3rXx81Ed56661y0UUXVdusVQEHV8Qb3KfcDjVr1izu/PFdnPH+nR9/miZlSqEhwFEIBE3KqE+IAkEbVJJG1BNaxWqK1YRAPEY8driDij20thTRpJ/IOogHCAUk9bALCWDGJLjuqvn85fvewox9tjGx9TXabBeF8mZM/xZa/HbG+25a/DYmRj3Mmeq46IJ5LF64H9Z24zXOpCl1ON9H6vpJBufKpNDWUsTiCCXFJ31EkiJpiqa79uEa77CaomkfpUiQJIa4TFtLCd1JXs7UFuTcDx9LW7SVSLcSJH20GkvkDJIIoRboH0gpu5SoODLx7ikaHin7T//0T7J48WK99tpr+eUvf7nH3pjaXX3wvay1HHrooZx77rl8+tOf3mtun46ODrnzzju599579eKLL+a3v/1ttX+Diz/lC3ywGhiGIWeeeSZXXXVV3aFgo8W1114rCxcu1PPOO49XXnmlzmidG6lrUwVqSezkk0/mm9/85qhKMAQyQCCOcqwEUQEbgk96wPcQNErl0X5EewhNsVIjVbBYJOkakg3sUkgHthDSgmKJAsVKgrG9GImBkUPq83ud+xdTOf20qfrMc/DS831s7exj69atlJOE1vHt7DdjKm8/qMSBBwIh/P7pboyPsZUDgFQ8ShkRNzh9iECg3LcBNMDahGKgBJJibC9WYnYVVRxIjKE78+YnAxSDIoF248qdTBrm2I5avPsw5JIL36Pf/f7veP6VjZSTiGLYhvNC4oSWSMEMIGNYU3ZMQu9POeUUOeWUUwB48skn98hlVRtzkatSIkKxWKSlpeV112VtBE488UQ58cQTueeee/TOO+/krrvuYt26esd/7bEWxhgOPvhgTj/9dD7xiU+w//7771HfTz31VFmzZg233HKL3njjjTz44IMkSVKXhJi339raygc+8AE+8YlPcPTRR4+63ch0IukAba2txOUUg6EYDlAKeioujT0ZQd5GmVbbQ6yKEuM0BYq0FLqGXFsQaCv2UZRtbO/rpFA56jNqAVvoAiaMqs2pFpl6CCw6pAVoASaPeO3aVavVeEVdlicj1uK8x4aGmYMOIrcCLYVuLJtJ0h4kENK4j1LBEoXdQPtO+xUE2wntFgJrcGpRHxCaPgKzfVTjmn8QMv+Kd3DbLzbrw088y9p1a+nrFwqFiHIcE9qEooydhCJjXfXsTw1PPfWUrlmzhnXr1rFx40astUyePJmZM2fyjne8g3333XfMCHD16tW6evVqVq9ezZo1aygUCsydO5dZs2bx53/+56+73c01piuR7NhRF8PkXeyYu4NOlx0U6PyOcgrGDx+HArDFo2p2nAPmgcDDpF0UEFqzGf3N49t4/qXfc/H5uz6faGuKfvLC5Wzqnky/78BYm6k+ppc5U/q55Zojh73HJoeKzUJJjGRjCTy0j6JkwgaH2prvWmDi66TuTtDO7bB5S/Z36ziYPA72Kb3JD/pqIsNhhx0mhx122BvS9uzZs2U0tW53F5Oh/rAMoeFnkk/IiaPWqrcTlWpY4hjGIrhN0b4Ylj+kPPKbl3ju2U14DQisYf9foScu2PlifeS30NnbSl/agg2KIP2o204pyAomjYSp+XjyOw+TDT0Spg3+7h5gAsiENnhL266vbQSahNLEHzX+sMqx5Kv/h7Lfj56Bdmw4iyQFK45vfe8hwmg+C/8s0uEI6p4n0G/e/Gt6k3aMHU/iFasJpVAg7uT4Y494I4b0pkaTUJr4o8acWZbpE6eyaq3FpFEWoi+W1CheJ/H1bz3FXT+fwPwj5uisfS0WWLuuzO+eXsMf1m6jq6+VoNhGkoARRZ1HTMLkCZY/e+cbPbo3H5o2lCb+6PGzXw/ov930awb8VHpdER+WiCXLSQpdSEhKFHbjfU+WU2RLJC7CmwIaRPT1JwRSJDRK0XQTuA2c+zfH8NfHD1dn/08be+WgryaaeCPx3mOKcuoJh2D9JlpsingHPs3ipULQMKQ3biWR6SQyne64ldQWSYCBuEypVCCyntD3YJPXWPTuAzh5UWNjrf5Y0JRQmviTwLYyetd/dnPr0scpSwdlUyRxliAqESdKaAu4tFLUKxAS108QAuoh7Sf0MW1RmcPndfCFzxxMxyi8NX+KaBJKE39SWLEevfk/VvD7Z7rod+MpmwJqCygB6itxTyiGGIgJTULIdsZFfZz53j/j9JPamRg2yWQkNAmliT85bEnQX/4afvzz3/Dq5h68LZA6wZpCVt/EpwRWwfXRPs5w9JEHcOqJ+zJrGjs9x6eJJqE08SeOp1ejr67rY80rr7G9ux8HtLa2MHWfDvaZ2sZhh0DHGNcQ+WNCk1CaaKKJhqHp5WmiiSYahiahNNFEEw1Dk1CaaKKJhqFJKE000UTD0CSUJppoomFoEkoTTTTRMDQJpYkmmmgYmoTSRBNNNAz/DxdUCCQMuY7sAAAAAElFTkSuQmCC" alt="GoFlight" style="height: 64px;"></div>
+                    <div class="hero-tagline">Aviation for the rest of us.</div>
+                    <h1>AI-Native Private Aviation Marketplace</h1>
+                    <p class="hero-subtitle">AI-native private aviation SaaS platform &mdash; one interface across the entire charter ecosystem, on any device</p>
+                    <span class="hero-badge">Investor Access · Confidential</span>
+                </section>
+
+                <!-- EXECUTIVE SUMMARY -->
+                <section class="section" id="executive-summary">
+                    <h2>Executive Summary</h2>
+                    <p>
+                        <strong>GoFlight</strong> is an AI-native private aviation SaaS platform connecting charter passengers, cargo shippers, brokers, and service providers directly with Part 135 operators. Built as a Delaware C-Corp, the platform empowers the entire charter ecosystem with a conversational AI called <strong>Wingman</strong> &mdash; accessible via web, mobile, SMS, WhatsApp, Telegram, voice, and email. GoFlight integrates with existing aviation marketplaces and operator tools, creating one unified interface across a fragmented industry.
+                    </p>
+                    <p><strong>Stage:</strong> Pre-revenue, demo ready, seeking first operator</p>
+                    <p><strong>Primary goal:</strong> Sign 10 active operators and complete 3 real bookings by June 2026</p>
+                    <p><strong>Founder:</strong> Jack Bradham, Davidson, NC</p>
+                </section>
+
+                <!-- TIMELINE -->
+                <section class="section" id="timeline">
+                    <h2>Timeline</h2>
+                    <h3 style="margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Strukt &amp; Proto Era — Design &amp; First Trials</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mid-2025</div>
+                            <div class="timeline-content">Initial GoFlight concept designed and built at Strukt &amp; Proto. First designs, prototypes, and technical trials begin</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Late 2025</div>
+                            <div class="timeline-content">Early AWS infrastructure stood up. Core architecture decisions made (serverless, DynamoDB, Lambda microservices)</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Early 2026</div>
+                            <div class="timeline-content">Formal launch planning begins. Platform taking shape under Strukt &amp; Proto's design and engineering resources</div>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 32px; margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">GoFlight Spin-Off — Independent C-Corp</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Late Feb 2026</div>
+                            <div class="timeline-content">Decision made to spin GoFlight off as an independent US-based Delaware C-Corp, run by Jack Bradham</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Feb 21, 2026</div>
+                            <div class="timeline-content">Brand name GoFlight confirmed. Domain secured</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Feb 24, 2026</div>
+                            <div class="timeline-content">Massive infrastructure day: 6 CDK stacks, 19 API endpoints, docs live, Stripe, SES</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 1, 2026</div>
+                            <div class="timeline-content">Omnichannel Wingman: SMS, WhatsApp, Telegram, Voice. Phone line live</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 5, 2026</div>
+                            <div class="timeline-content">Largest single-day sprint. Security fixes. Stripe live. Operator onboarding wizard</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 10, 2026</div>
+                            <div class="timeline-content">Demo complete — platform live on prod</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 20, 2026</div>
+                            <div class="timeline-content">Dev Factory built. 19 features shipped overnight. 158 Lambda functions, 35 CI/CD pipelines, 1,475 tests, 354 commits</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 24-26, 2026</div>
+                            <div class="timeline-content">NBAA SDC Cleveland attended</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Mar 29, 2026</div>
+                            <div class="timeline-content">goflight.ai becomes primary domain</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Apr 10, 2026</div>
+                            <div class="timeline-content">Feature freeze — focused on commercial traction</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MISSION & STRATEGY -->
+                <section class="section" id="mission">
+                    <h2>Mission & Strategy</h2>
+
+                    <h3>Positioning</h3>
+                    <p><strong>"Aviation for the rest of us."</strong></p>
+                    <p>Private aviation is broken &mdash; not because the planes aren't there, but because the process is expensive, opaque, and built for insiders. Booking a charter today means cold-calling brokers, waiting for quotes, and paying markups you'll never see. GoFlight exists to change that.</p>
+                    <p>We use AI to make booking a private flight as simple as sending a text. Faster quotes. Better prices. An experience that finally puts the customer first.</p>
+                    <p><strong>Transparency is non-negotiable.</strong> Every customer deserves to understand what they're paying for, what they're getting, and why. GoFlight's composable trip model breaks every charter into its real components &mdash; aircraft, fuel, crew positioning, deadhead, landing fees, FBO costs &mdash; so the price isn't a black box. If something changes, it's documented clearly and the customer sees exactly what shifted and why. No hidden markups. No mystery surcharges. Just an honest price for an honest flight.</p>
+
+                    <h3>Why Now</h3>
+                    <p>Three things have converged: AI has matured enough to power the entire charter workflow. Cloud infrastructure makes it possible to build and operate at a fraction of what it cost even two years ago. And the market is ready &mdash; customers are tired of the old model and operators and brokers want better tools and direct access to demand.</p>
+
+                    <h3>Go-to-Market</h3>
+                    <p>GoFlight serves the entire Part 135 ecosystem &mdash; not just operators and passengers, but brokers, FBOs, fuel providers, ground transport, catering, and every service provider that touches a charter trip.</p>
+                    <ul>
+                        <li><strong>Strategy:</strong> Operator-first &mdash; sign operators, build the supply side, then bring them customers</li>
+                        <li><strong>Launch market:</strong> US + EU. EBACE Geneva (June 2-4, 2026) is the international launchpad</li>
+                        <li><strong>Target market:</strong> Anyone in the Part 135 ecosystem &mdash; operators, brokers, FBOs, management companies, service providers</li>
+                        <li><strong>Target customer:</strong> Anyone who participates in Part 135 flights and accompanying services</li>
+                    </ul>
+                    <p style="margin-top: 12px;">The composable trip model is what makes this possible. Every trip is built from real components &mdash; aircraft, fuel, crew, ground services, FBO &mdash; which means service providers like American Flight Support, catering companies, and ground transport can all plug into the platform as part of the trip itself. GoFlight becomes the connective layer across the entire charter ecosystem.</p>
+
+                    <h3>The Platform</h3>
+                    <ul>
+                        <li><strong>For customers:</strong> Just say where you're going. Wingman handles the rest.</li>
+                        <li><strong>For operators:</strong> Get booked directly. Transparent pricing. No middleman markup.</li>
+                        <li><strong>For service providers:</strong> Plug into trips as a component. Get discovered by operators and customers who need you.</li>
+                    </ul>
+
+                    <h3>Revenue Model</h3>
+                    <p>A $20/month subscription for all users keeps the platform serious and filters out "tire-kickers." GoFlight will also take a portion of the total trip price &mdash; starting at zero as the network builds, and growing as the platform proves its value to the ecosystem. The first pricing upgrade will be to 1.5%, then 3%.</p>
+                </section>
+
+                <!-- BUSINESS MODEL -->
+                <section class="section" id="business-model">
+                    <h2>Business Model</h2>
+
+                    <h3>Revenue Streams</h3>
+                    <ul>
+                        <li><strong>Subscription:</strong> $20/month per user &mdash; filters out tire-kickers and creates a recurring revenue base</li>
+                        <li><strong>Transaction fee:</strong> A portion of total trip price &mdash; starts at zero to build the network, grows as the platform proves its value to the ecosystem</li>
+                        <li><strong>Ecosystem services:</strong> As service providers (FBOs, fuel, ground transport, catering) plug into the composable trip model, each touchpoint becomes a potential revenue layer</li>
+                    </ul>
+
+                    <h3>Payment Flow</h3>
+                    <p>Customer pays &rarr; Escrow &rarr; Operator paid after delivery (24-72 hour hold). Full price transparency throughout &mdash; the customer sees what every component costs.</p>
+
+                    <h3>Payment Economics</h3>
+                    <p>Credit card processing fees (~2.5%) are embedded in the trip price, ensuring GoFlight's transaction fee (up to 3%) represents clean margin. Stripe powers all payment processing with built-in escrow protection.</p>
+                    <p><strong>Bank Transfer (ACH) &mdash; on the roadmap.</strong> Stripe supports ACH Direct Debit at 0.8%, capped at $5 per transaction. On a $50,000 charter, that's $5 in processing instead of ~$1,250 via credit card. ACH bank transfer will be offered as an alternative payment method for high-value bookings, dramatically improving unit economics for both GoFlight and its customers.</p>
+
+                    <h3>Go-to-Market</h3>
+                    <p style="margin-bottom: 12px;"><strong>Phase 1 (Months 1&ndash;6): Industry events and direct outreach.</strong> EBACE Geneva, NBAA-BACE, and regional shows. Every event is a face-to-face onboarding opportunity with operators and brokers. At $20/month, the barrier to try GoFlight is nearly zero &mdash; less than a cup of coffee a day to access an AI-native platform that can save hours on every trip.</p>
+                    <p style="margin-bottom: 12px;"><strong>Phase 2 (Months 7&ndash;12): Network effects.</strong> Every operator who joins makes the platform more valuable for brokers, and vice versa. The Wingman's omnichannel reach &mdash; SMS, WhatsApp, email, voice &mdash; means operators can respond to quotes without changing their workflow. Private aviation is a tight-knit industry; word of mouth travels fast.</p>
+                    <p style="margin-bottom: 16px;"><strong>Phase 3 (Year 2&ndash;3): Ecosystem expansion.</strong> As service providers (FBOs, fuel, ground transport, catering) plug into the composable trip model, GoFlight becomes the connective layer for the entire trip. Each new integration is a distribution channel &mdash; the FBO on GoFlight recommends it to every operator they serve.</p>
+
+                    <h3>Revenue Projections</h3>
+                    <p style="margin-bottom: 12px; color: #586B7D; font-size: 14px;">Target: <strong>4,000 active subscribers</strong> and <strong>1,000 trips/month</strong> at scale. Average booking: $35,000. Transaction fee starts at 0%, first upgrade to 1.5%, then 3% as the platform matures.</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Subscribers</th>
+                                    <th>Trips/Month</th>
+                                    <th>Take Rate</th>
+                                    <th>Monthly Revenue</th>
+                                    <th>Annual Run-Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Months 1-6</td>
+                                    <td>200</td>
+                                    <td>10</td>
+                                    <td>0%</td>
+                                    <td>$4,000</td>
+                                    <td>$48,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Months 7-12</td>
+                                    <td>800</td>
+                                    <td>80</td>
+                                    <td>1.5%</td>
+                                    <td>$58,000</td>
+                                    <td>$696,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Year 2</td>
+                                    <td>2,000</td>
+                                    <td>400</td>
+                                    <td>1.5%</td>
+                                    <td>$250,000</td>
+                                    <td>$3,000,000</td>
+                                </tr>
+                                <tr style="background: #F0F7FF;">
+                                    <td><strong>Year 3</strong></td>
+                                    <td><strong>4,000</strong></td>
+                                    <td><strong>1,000</strong></td>
+                                    <td><strong>3%</strong></td>
+                                    <td><strong>$1,130,000</strong></td>
+                                    <td><strong>$13,560,000</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="margin-top: 8px; font-size: 12px; color: #8898AA;">Year 3 revenue: 4,000 subs &times; $20/mo ($80K) + 1,000 trips &times; $35K &times; 3% ($1.05M) = $1.13M/mo</p>
+                    <p style="margin-top: 12px; color: #586B7D; font-size: 14px;"><strong>Break-even estimate:</strong> ~50 bookings/month at the 1.5% take rate, given GoFlight's low operating costs. The platform does not need massive scale to be self-sustaining.</p>
+
+                    <h3>Current Burn</h3>
+                    <ul>
+                        <li><strong>Operating costs:</strong> $800-$1,200/month</li>
+                        <li><strong>Trips &amp; marketing:</strong> $2,000-$5,000/month</li>
+                        <li><strong>Offshore developers:</strong> $1,000/month</li>
+                        <li><strong>Sales staff (incoming):</strong> $4,000-$10,000/month</li>
+                    </ul>
+                    <p style="margin-top: 8px; color: #586B7D; font-size: 14px;">Funded by owners. Total near-term burn: <strong>$7,800-$17,200/month</strong>.</p>
+
+                    <h3>Projected Operating Costs at Scale</h3>
+                    <p style="margin-bottom: 16px; color: #586B7D;">GoFlight's serverless architecture keeps operating costs dramatically low even at scale. Projected below at 200 active users sustaining 1 request/second (~17.3M requests/month). Because the architecture is serverless, costs scale linearly as the platform grows to 4,000 subscribers.</p>
+
+                    <p style="margin-bottom: 8px; font-size: 13px; color: #8898AA; text-transform: uppercase; letter-spacing: 0.05em;">Current Infrastructure (April 2026)</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;">
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <p style="font-size: 24px; font-weight: 700; color: #0A2540;">158</p>
+                            <p style="font-size: 12px; color: #586B7D;">Lambda Functions</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <p style="font-size: 24px; font-weight: 700; color: #0A2540;">73</p>
+                            <p style="font-size: 12px; color: #586B7D;">API Gateways</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <p style="font-size: 24px; font-weight: 700; color: #0A2540;">59</p>
+                            <p style="font-size: 12px; color: #586B7D;">DynamoDB Tables</p>
+                        </div>
+                        <div class="card" style="padding: 16px; text-align: center;">
+                            <p style="font-size: 24px; font-weight: 700; color: #0A2540;">12</p>
+                            <p style="font-size: 12px; color: #586B7D;">CloudFront Distributions</p>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-bottom: 12px;">AWS Infrastructure Cost &mdash; 200 Users at 1 req/sec</h4>
+                    <div style="overflow-x: auto; margin-bottom: 24px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th style="text-align: right;">Monthly Cost</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>API Gateway (73)</td>
+                                    <td style="text-align: right;">$272</td>
+                                    <td style="font-size: 12px; color: #586B7D;">$3.50/gateway base + $1/M requests</td>
+                                </tr>
+                                <tr>
+                                    <td>DynamoDB (59 tables)</td>
+                                    <td style="text-align: right;">$43</td>
+                                    <td style="font-size: 12px; color: #586B7D;">On-demand, pay-per-request</td>
+                                </tr>
+                                <tr>
+                                    <td>Lambda (158 functions)</td>
+                                    <td style="text-align: right;">$28</td>
+                                    <td style="font-size: 12px; color: #586B7D;">Avg 274MB, ~200ms/invocation</td>
+                                </tr>
+                                <tr>
+                                    <td>CloudFront (12 distributions)</td>
+                                    <td style="text-align: right;">$21</td>
+                                    <td style="font-size: 12px; color: #586B7D;">CDN + data transfer</td>
+                                </tr>
+                                <tr>
+                                    <td>WAF</td>
+                                    <td style="text-align: right;">$15</td>
+                                    <td style="font-size: 12px; color: #586B7D;">Web application firewall</td>
+                                </tr>
+                                <tr>
+                                    <td>SES, S3, SNS, SQS, Secrets, Route53</td>
+                                    <td style="text-align: right;">$30</td>
+                                    <td style="font-size: 12px; color: #586B7D;">Email, storage, messaging, DNS</td>
+                                </tr>
+                                <tr style="background: #F0F4F8; font-weight: 600;">
+                                    <td><strong>Total AWS Infrastructure</strong></td>
+                                    <td style="text-align: right;"><strong>~$409/mo</strong></td>
+                                    <td style="font-size: 12px; color: #586B7D;">Current month-to-date (Apr 1-12): $107</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                        <div class="card" style="padding: 20px;">
+                            <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #8898AA; margin-bottom: 8px;">AWS Infrastructure at Scale</p>
+                            <p style="font-size: 28px; font-weight: 700; color: #0A2540;">~$409/mo</p>
+                            <p style="font-size: 13px; color: #586B7D;">158 Lambdas, 73 API Gateways, 59 DynamoDB tables, 12 CloudFront</p>
+                        </div>
+                        <div class="card" style="padding: 20px;">
+                            <p style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: #8898AA; margin-bottom: 8px;">Communications</p>
+                            <p style="font-size: 28px; font-weight: 700; color: #0A2540;">~$53/mo</p>
+                            <p style="font-size: 13px; color: #586B7D;">Telnyx SMS/WhatsApp, ElevenLabs voice, Hetzner</p>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-bottom: 12px;">AI Model Costs &mdash; Model-Agnostic by Design</h4>
+                    <p style="margin-bottom: 16px; color: #586B7D; font-size: 14px;">GoFlight is not locked to any single AI provider. Wingman can run on OpenAI, Anthropic, Z.ai (GLM), or open-source models &mdash; swapping based on cost, performance, and task complexity without code changes.</p>
+
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Input $/M tokens</th>
+                                    <th>Output $/M tokens</th>
+                                    <th>AI Cost/mo</th>
+                                    <th>Total Ops Cost/mo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>DeepSeek V3</strong></td>
+                                    <td>$0.014</td>
+                                    <td>$0.028</td>
+                                    <td>&lt;$1</td>
+                                    <td><strong>$462</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>GPT-4.1 Nano</strong></td>
+                                    <td>$0.05</td>
+                                    <td>$0.20</td>
+                                    <td>&lt;$1</td>
+                                    <td><strong>$462</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gemini 2.5 Flash Lite</strong></td>
+                                    <td>$0.10</td>
+                                    <td>$0.40</td>
+                                    <td>$2</td>
+                                    <td><strong>$464</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gemini 2.5 Flash</strong></td>
+                                    <td>$0.30</td>
+                                    <td>$2.50</td>
+                                    <td>$10</td>
+                                    <td><strong>$472</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Claude Haiku 4.5</strong></td>
+                                    <td>$1.00</td>
+                                    <td>$5.00</td>
+                                    <td>$19</td>
+                                    <td><strong>$481</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>DeepSeek R1</strong> (reasoning)</td>
+                                    <td>$0.55</td>
+                                    <td>$2.19</td>
+                                    <td>$9</td>
+                                    <td><strong>$471</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>GPT-4.1</strong></td>
+                                    <td>$2.00</td>
+                                    <td>$8.00</td>
+                                    <td>$32</td>
+                                    <td><strong>$494</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Claude Sonnet 4.6</strong></td>
+                                    <td>$3.00</td>
+                                    <td>$15.00</td>
+                                    <td>$58</td>
+                                    <td><strong>$520</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p style="margin-top: 8px; font-size: 12px; color: #8898AA;">Total = AWS infra (~$409) + comms (~$53) + AI model cost. All figures at 200 users / 1 req/sec.</p>
+
+                    <div class="callout" style="margin-top: 20px;">
+                        <strong>The economics:</strong> A traditional brokerage handling 200 customers typically requires 3-5 staff at $4,000-$6,000/month each ($12K-$30K/mo). GoFlight runs the entire platform for $462-$520/month depending on AI model choice &mdash; empowering brokers and operators to scale without scaling headcount. That's a 25-65x structural cost advantage. At 4,000 subscribers the math only gets better: serverless costs scale linearly while revenue scales exponentially with network effects.
+                    </div>
+
+                    <p style="margin-top: 16px; color: #586B7D; font-size: 14px;"><strong>Likely production approach:</strong> A hybrid model &mdash; fast/cheap models (GPT-4o mini or GLM Flash) for routing, status checks, and simple queries; premium models (Claude or GPT-4o) only for complex trip negotiations and high-value interactions.</p>
+                </section>
+
+                <!-- PRODUCT -->
+                <section class="section" id="product">
+                    <h2>Product</h2>
+
+                    <p style="margin-bottom: 16px; color: #586B7D;">GoFlight is a full SaaS platform &mdash; responsive web app on mobile, tablet, and desktop &mdash; with every channel connected to a single AI called Wingman. Every participant in the charter ecosystem gets the interface they actually use, and every interaction flows through one composable trip model.</p>
+
+                    <h3>For Customers</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Request a quote however you want &mdash; GoFlight meets you where you are.</p>
+                    <ul>
+                        <li><strong>Text or WhatsApp Wingman</strong> with where you're going and when &mdash; get back real quotes in seconds</li>
+                        <li><strong>Email a request</strong> to wingman@goflight.ai &mdash; Wingman builds the trip, reaches out to operators, and replies with options</li>
+                        <li><strong>Call Wingman</strong> by phone &mdash; voice-powered AI walks you through the booking conversationally</li>
+                        <li><strong>Use the web/mobile app</strong> for full trip management, payment, and tracking</li>
+                        <li><strong>Full price transparency</strong> &mdash; the composable trip model breaks every charter into real components so you see exactly what you're paying for and why</li>
+                    </ul>
+
+                    <h3>For Operators</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Speed wins quotes. Operators can respond on any channel &mdash; seconds matter.</p>
+                    <ul>
+                        <li><strong>Real-time bid notifications</strong> via SMS, WhatsApp, email, or dashboard &mdash; respond to quotes instantly from any device</li>
+                        <li><strong>Operator dashboard</strong> for fleet management, bid history, analytics, and passenger flow</li>
+                        <li><strong>Competitive quoting</strong> &mdash; Wingman queries available aircraft across the network and returns price-sorted options to customers</li>
+                        <li><strong>Automated trip assembly</strong> &mdash; deadhead routing, fuel, crew positioning, landing fees computed in real time</li>
+                        <li><strong>Stripe payment processing</strong> with escrow protection (24-72 hour hold)</li>
+                    </ul>
+
+                    <h3>For Brokers</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Wingman empowers brokers to handle 10x the volume without 10x the staff.</p>
+                    <ul>
+                        <li><strong>AI-powered quoting</strong> &mdash; Wingman does the legwork of sourcing, pricing, and assembling trips across the operator network</li>
+                        <li><strong>Customer management tools</strong> &mdash; track conversations, trips, preferences, and repeat booking patterns</li>
+                        <li><strong>Transparent pricing documentation</strong> &mdash; every component of the trip is itemized and traceable, building trust with customers</li>
+                    </ul>
+
+                    <h3>For Service Providers (FBOs, Fuel, Ground, Catering)</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Wingman proactively reaches out to service providers on behalf of the operator or broker.</p>
+                    <ul>
+                        <li><strong>Plug into trips as a component</strong> &mdash; the composable trip model lets FBOs, fuel providers, ground transport, and catering appear as bookable services within any charter</li>
+                        <li><strong>Automated outreach from Wingman</strong> &mdash; when a trip needs ground transport or specific FBO services, Wingman contacts providers directly to coordinate and price</li>
+                        <li><strong>Get discovered</strong> by operators and customers who need your services in your region</li>
+                    </ul>
+
+                    <h3>Platform Capabilities</h3>
+                    <ul>
+                        <li>Composable trip model &mdash; every trip built from real components, fully transparent and documented</li>
+                        <li>Omnichannel AI (web, mobile, SMS, WhatsApp, Telegram, voice, email)</li>
+                        <li>Model-agnostic AI &mdash; swap between DeepSeek, GPT, Gemini, Claude, or open-source without code changes</li>
+                        <li>Internationalization (8 languages)</li>
+                        <li>Review &amp; rating system with trust scores</li>
+                        <li>GDPR compliance</li>
+                    </ul>
+
+                    <h3>Tech Metrics</h3>
+                    <div class="stat-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">158</div>
+                            <div class="stat-label">Lambda Functions</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">35</div>
+                            <div class="stat-label">CI/CD Pipelines</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">1,475</div>
+                            <div class="stat-label">Tests (11s runtime)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">354</div>
+                            <div class="stat-label">Commits (March 2026)</div>
+                        </div>
+                    </div>
+
+                    <div class="cta-box">
+                        <h3>Try Wingman</h3>
+                        <p>Experience the AI-native private aviation SaaS platform firsthand</p>
+                        <p>
+                            <strong>Call:</strong> +1 (305) 363-1121<br>
+                            <strong>Email:</strong> wingman@goflight.ai
+                        </p>
+                    </div>
+                </section>
+
+                <!-- MARKET & COMPETITION -->
+                <section class="section" id="market">
+                    <h2>Market & Competition</h2>
+
+                    <h3>Market Size</h3>
+                    <ul>
+                        <li><strong>Global air charter:</strong> ~$30B (5-8% CAGR)</li>
+                        <li><strong>US on-demand:</strong> ~$4-5B</li>
+                        <li><strong>Platform sub-market:</strong> $3.5B → $7.2B by 2032</li>
+                    </ul>
+
+                    <h3>Competitive Landscape</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Competitor</th>
+                                    <th>Model</th>
+                                    <th>Threat Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Avinode</strong></td>
+                                    <td>B2B SaaS, 1,000+ operators</td>
+                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>XO/Vista</strong></td>
+                                    <td>B2C + fleet, $3B+ parent</td>
+                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hamilton AI</strong></td>
+                                    <td>AI-first, $10M raised</td>
+                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tivoli</strong></td>
+                                    <td>~4K operators, AI pricing</td>
+                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>FlyHouse</strong></td>
+                                    <td>Raised $300M</td>
+                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Differentiators</h3>
+                    <ul>
+                        <li>Operator-first tools (SaaS hybrid model)</li>
+                        <li>Mid-market focus (non-ultra-luxury)</li>
+                        <li>Cargo + passenger support</li>
+                        <li>Hospitality-first UX</li>
+                        <li>AI Wingman as industry infrastructure</li>
+                    </ul>
+                </section>
+
+
+                <!-- FOUNDER -->
+                <section class="section" id="founder">
+                    <h2>Founder</h2>
+                    <div class="card" style="display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;">
+                        <div style="flex: 0 0 120px;">
+                            <div style="width: 120px; height: 120px; border-radius: 12px; background: linear-gradient(135deg, #0A2540, #2E75B6); display: flex; align-items: center; justify-content: center; color: white; font-size: 42px; font-weight: 700;">JB</div>
+                        </div>
+                        <div style="flex: 1; min-width: 280px;">
+                            <h3 style="margin-bottom: 4px;">Jack Bradham</h3>
+                            <p style="color: #8898AA; font-size: 14px; margin-bottom: 16px;">Founder &amp; CEO, GoFlight &middot; <a href="https://www.linkedin.com/in/jackbradham/" target="_blank" style="color: #2E75B6; text-decoration: none;">LinkedIn</a></p>
+
+                            <p style="margin-bottom: 12px;">Jack built his first aviation business from the ground up. From 1999 to 2012, he led the internet business division of <strong>East Coast Air Charter (ECACI)</strong>, an on-demand air charter services company co-built with Lisa and Bill McBane. He managed developers, designers, and content providers, growing ECACI to <strong>$20MM in yearly revenue with 13% margins</strong>. The company was acquired by XPO Logistics in 2012.</p>
+
+                            <p style="margin-bottom: 12px;">That experience &mdash; over a decade inside the charter business &mdash; is why GoFlight exists. Jack knows firsthand how broken the broker model is, because he lived inside it.</p>
+
+                            <p style="margin-bottom: 12px;">After the exit, Jack spent nearly <strong>20 years at Microsoft</strong>, rising from technical roles to Sales Director for Emerging Products (Big Data &amp; Analytics), leading a team of 7 across the Eastern US. His enterprise customers included NASCAR, NUCOR, Danaher, and Ingersoll Rand. He earned Microsoft Gold Club and Mentor Gold honors.</p>
+
+                            <p style="margin-bottom: 12px;">He then moved to <strong>Google</strong> as a Cloud Technologist and GTM Outbound Product Manager for Cloud Spanner (3 years), followed by his current role as <strong>Senior Solutions Architect at AWS</strong> (3.5 years), where he architects cloud solutions for enterprise customers.</p>
+
+                            <p style="margin-bottom: 12px;">Jack holds an <strong>MBA in International Business</strong> from the University of South Carolina and a <strong>BS/BA in Computer Information Systems</strong> from Appalachian State University. He holds 9 cloud certifications including AWS Certified Solutions Architect and AWS Certified Data Analytics.</p>
+
+                            <p style="margin-bottom: 12px;">Based in the Florida Keys and operating out of Miami. thousands of followers on LinkedIn. 21 professional recommendations. A builder who has done this before &mdash; at real scale, with real revenue.</p>
+
+                            <p style="color: #586B7D; font-size: 14px; font-style: italic;">"I built a $20 million charter business before the technology existed to do it right. Now it does. That's GoFlight."</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CORPORATE ENTITY -->
+                <section class="section" id="entity">
+                    <h2>Corporate Entity</h2>
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">GoFlight &mdash; Delaware C-Corp</h3>
+                        <p style="margin-bottom: 16px;">GoFlight operates as a Delaware C-Corp. EIN: 41-4338471.</p>
+                        <div style="background: #F4F5F7; border-radius: 8px; padding: 24px; margin-top: 16px;">
+                            <p style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #8898AA; margin-bottom: 12px;">Parent Organization</p>
+                            <p style="margin-bottom: 12px;">GoFlight was started under <strong>Strukt &amp; Proto</strong>, a US/Netherlands software and AI design firm and investment firm. Strukt + Proto is owned in partnership by Jack Bradham and Adam Hensley, and the <strong>Strukt + Proto Stichting Administratiekantoor</strong> investment group.</p>
+                            <p style="margin-bottom: 12px;">Strukt &amp; Proto provided design, development, and strategic infrastructure from which GoFlight was born. In late February 2026, it was decided that GoFlight would live on its own, run by Jack as sole decision-maker and operator &mdash; leveraging Strukt's software engineering capabilities and cross-Atlantic operational footprint to accelerate GoFlight's build and go-to-market.</p>
+                            <p><strong>Transition to a US Corp homed in Delaware:</strong> This ownership and US-based C-Corp structure allows investors and partners to take ownership of the platform as they work to build it into the vision.</p>
+                            <p style="margin-top: 12px;"><strong>Investment &amp; Equity:</strong> GoFlight is currently self-funded by its owners. Partners who wish to enter equity roles beyond the standard platform relationship will need to provide funding and investment beyond "sweat equity." GoFlight may choose at a later time to run a formal funding round as the platform scales and the opportunity warrants it.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TEAM -->
+                
+
+                <!-- RISKS & OPEN QUESTIONS -->
+                <section class="section" id="risks">
+                    <h2>Risks &amp; Open Questions</h2>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">Competitive Defense</h3>
+                        <p><strong>Price and low overhead.</strong> GoFlight's entire operating infrastructure runs at $462&ndash;$520/month &mdash; a 25&ndash;65x cost advantage over competitors spending millions on legacy systems and large engineering teams. This means GoFlight can price aggressively, reach profitability faster, and survive longer without outside capital.</p>
+                        <p style="margin-top: 12px;"><strong>Speed to innovation.</strong> GoFlight's Dev Factory development methodology &mdash; leveraging AI-assisted autonomous development &mdash; shipped 19 features overnight and built 158 Lambda functions, 35 CI/CD pipelines, and 1,475 tests with a solo technical founder. While a funded competitor spends months hiring a team and aligning on architecture, GoFlight is already shipping the next generation of features. The combination of near-zero infrastructure cost and extraordinary development velocity creates a compounding advantage that is difficult for larger, slower organizations to match.</p>
+                    </div>
+
+                    <div class="card" style="margin-top: 24px;">
+                        <h3 style="margin-bottom: 16px;">Regulatory &amp; Compliance</h3>
+                        <p>Private aviation operates under FAA Part 135 certification, TSA security requirements, and DOT oversight. GoFlight's founding team has direct experience operating as a charter broker, but the full regulatory landscape for a technology platform facilitating Part 135 bookings is an area that requires deeper expertise as the company scales.</p>
+                        <p style="margin-top: 12px;">Understanding the compliance obligations that apply to GoFlight as a platform &mdash; distinct from those that apply to the operators themselves &mdash; is an active area of research and a priority as we move toward broader market adoption. We view this as an opportunity for the right partner or advisor to add significant value.</p>
+                    </div>
+                </section>
+
+                <!-- EVENTS -->
+                <section class="section" id="events">
+                    <h2>Industry Events</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>NBAA SDC Cleveland</strong></td>
+                                    <td>Mar 24-26, 2026</td>
+                                    <td style="color: var(--success); font-weight: 600;">ATTENDED</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EBACE Geneva</strong></td>
+                                    <td>Jun 2-4, 2026</td>
+                                    <td style="color: var(--accent); font-weight: 600;">PLANNING</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NBAA-BACE</strong></td>
+                                    <td>Oct 2026</td>
+                                    <td style="color: var(--accent); font-weight: 600;">TARGET</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- CONTACT -->
+                <section class="section" id="contact">
+                    <h2>Contact</h2>
+
+                    <p>
+                        <strong>Jack Bradham (Founder)</strong><br>
+                        Email: jack@goflight.ai
+                    </p>
+
+                    <p>
+                        <strong>Wingman (AI Assistant)</strong><br>
+                        Phone: +1 (305) 363-1121<br>
+                        Email: wingman@goflight.ai
+                    </p>
+
+                    <p>
+                        <strong>Domain:</strong> goflight.ai
+                    </p>
+                </section>
+
+                <!-- FOOTER -->
+                <div class="footer">
+                    <p>Confidential — Do not distribute</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const validCodes = ['charter', 'flight', 'runway'];
-        
-        function checkAccess() {
-            const code = document.getElementById('accessCode').value;
-            if (validCodes.includes(code.toLowerCase())) {
-                sessionStorage.setItem('authenticated', 'true');
-                showWiki();
-            } else {
-                document.getElementById('error').style.display = 'block';
-            }
-        }
-        
-        function showWiki() {
-            document.getElementById('authScreen').style.display = 'none';
-            document.getElementById('wikiScreen').style.display = 'block';
-        }
-        
-        function logout() {
-            sessionStorage.removeItem('authenticated');
-            document.getElementById('authScreen').style.display = 'flex';
-            document.getElementById('wikiScreen').style.display = 'none';
-            document.getElementById('accessCode').value = '';
-        }
-        
+        const accessGate = document.getElementById('accessGate');
+        const appContainer = document.getElementById('appContainer');
+        const accessForm = document.getElementById('accessForm');
+        const accessCode = document.getElementById('accessCode');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const correctCode = 'charter';
+
         function checkAuth() {
-            if (sessionStorage.getItem('authenticated') === 'true') {
-                showWiki();
+            const isAuthenticated = localStorage.getItem('goflight_auth');
+            if (isAuthenticated === 'true') {
+                accessGate.classList.add('hidden');
+                appContainer.style.display = 'flex';
             }
         }
-        
-        document.getElementById('accessCode').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkAccess();
+
+        accessForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (accessCode.value === correctCode) {
+                localStorage.setItem('goflight_auth', 'true');
+                errorMessage.classList.remove('show');
+                accessGate.classList.add('hidden');
+                appContainer.style.display = 'flex';
+                accessCode.value = '';
+            } else {
+                errorMessage.classList.add('show');
+                accessCode.value = '';
+                accessCode.focus();
+            }
         });
-        
-        window.addEventListener('load', checkAuth);
+
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('goflight_auth');
+            accessGate.classList.remove('hidden');
+            appContainer.style.display = 'none';
+            accessCode.value = '';
+            accessCode.focus();
+        });
+
+        const navItems = document.querySelectorAll('.nav-item');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = item.getAttribute('data-section');
+                const element = document.getElementById(section);
+
+                if (element) {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('.section, #hero');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-section') === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        checkAuth();
     </script>
 </body>
 </html>
