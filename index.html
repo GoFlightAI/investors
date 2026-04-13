@@ -549,6 +549,12 @@
 
         /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
             .sidebar {
                 width: 100%;
                 height: auto;
@@ -556,6 +562,14 @@
                 border-bottom: 1px solid var(--border);
                 position: static;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            }
+
+            .sidebar-logo {
+                display: none;
+            }
+
+            .sidebar-footer {
+                display: none;
             }
 
             .sidebar-nav {
@@ -568,10 +582,12 @@
             .nav-item {
                 padding: 8px 12px;
                 white-space: nowrap;
+                border-left: none;
             }
 
             .main-content {
                 margin-left: 0;
+                flex: 1;
             }
 
             .content-wrapper {
