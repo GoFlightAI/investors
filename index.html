@@ -659,9 +659,19 @@
                 grid-template-columns: 1fr;
             }
 
+            .access-gate {
+                align-items: flex-start;
+                overflow-y: auto;
+                padding: 40px 0;
+            }
+
             .gate-card {
-                margin: 20px;
+                margin: 0 20px;
                 padding: 40px 24px;
+            }
+
+            .gate-card h1 {
+                font-size: 24px;
             }
 
             [style*="grid-template-columns"] {
@@ -1456,6 +1466,9 @@
         <a data-section="risks" onclick="navigateToSection('risks')">Risks &amp; Open Questions</a>
         <a data-section="events" onclick="navigateToSection('events')">Events</a>
         <a data-section="contact" onclick="navigateToSection('contact')">Contact</a>
+        <div style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px;">
+            <a onclick="document.getElementById('logoutBtn').click(); closeMobileMenu();" style="color: var(--text-muted);">Log Out</a>
+        </div>
     </div>
 
     <script>
