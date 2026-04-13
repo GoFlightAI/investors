@@ -601,6 +601,11 @@
                 margin: 20px;
                 padding: 40px 24px;
             }
+
+            [style*="grid-template-columns: repeat(4"],
+            [style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
         }
     </style>
 </head>
