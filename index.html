@@ -1437,6 +1437,32 @@
         });
 
         checkAuth();
+    </script>
+
+    <!-- Mobile hamburger + slide-up menu -->
+    <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-handle"></div>
+        <a data-section="hero" onclick="navigateToSection('hero')">Home</a>
+        <a data-section="executive-summary" onclick="navigateToSection('executive-summary')">Executive Summary</a>
+        <a data-section="mission" onclick="navigateToSection('mission')">Mission &amp; Strategy</a>
+        <a data-section="business-model" onclick="navigateToSection('business-model')">Business Model</a>
+        <a data-section="product" onclick="navigateToSection('product')">Product</a>
+        <a data-section="market" onclick="navigateToSection('market')">Market &amp; Competition</a>
+        <a data-section="founder" onclick="navigateToSection('founder')">Founder</a>
+        <a data-section="entity" onclick="navigateToSection('entity')">Corporate Entity</a>
+        <a data-section="timeline" onclick="navigateToSection('timeline')">Timeline</a>
+        <a data-section="risks" onclick="navigateToSection('risks')">Risks &amp; Open Questions</a>
+        <a data-section="events" onclick="navigateToSection('events')">Events</a>
+        <a data-section="contact" onclick="navigateToSection('contact')">Contact</a>
+    </div>
+
+    <script>
+        function navigateToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
         // ─── MOBILE HAMBURGER MENU ───
         const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -1466,36 +1492,8 @@
         mobileOverlay.addEventListener('click', closeMobileMenu);
 
         document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                closeMobileMenu();
-            });
+            link.addEventListener('click', closeMobileMenu);
         });
-    </script>
-
-    <!-- Mobile hamburger + slide-up menu -->
-    <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
-    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-handle"></div>
-        <a data-section="hero" onclick="navigateToSection('hero')">Home</a>
-        <a data-section="executive-summary" onclick="navigateToSection('executive-summary')">Executive Summary</a>
-        <a data-section="mission" onclick="navigateToSection('mission')">Mission &amp; Strategy</a>
-        <a data-section="business-model" onclick="navigateToSection('business-model')">Business Model</a>
-        <a data-section="product" onclick="navigateToSection('product')">Product</a>
-        <a data-section="market" onclick="navigateToSection('market')">Market &amp; Competition</a>
-        <a data-section="founder" onclick="navigateToSection('founder')">Founder</a>
-        <a data-section="entity" onclick="navigateToSection('entity')">Corporate Entity</a>
-        <a data-section="timeline" onclick="navigateToSection('timeline')">Timeline</a>
-        <a data-section="risks" onclick="navigateToSection('risks')">Risks &amp; Open Questions</a>
-        <a data-section="events" onclick="navigateToSection('events')">Events</a>
-        <a data-section="contact" onclick="navigateToSection('contact')">Contact</a>
-    </div>
-
-    <script>
-        function navigateToSection(id) {
-            const el = document.getElementById(id);
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     </script>
 </body>
 </html>
