@@ -1,46 +1,68 @@
-# GoFlight Brief — April 10, 2026
+# GoFlight Brief — April 22, 2026
 ## For Claude Code & Project Sessions
 
 ---
 
 ## BUSINESS CONTEXT
 
-**Company:** GoFlight.ai — operator-first charter marketplace  
-**Stage:** Post-soft-launch, zero revenue, zero paying customers  
-**Burn Rate:** ~$500-700/mo (AWS ~$350, GitHub $8, M365 $30, Hetzner TBD)  
-**Runway:** ~12 months at current burn  
-**Business Model:** 3% flat transaction fee + future SaaS upsell ($99-299/mo for premium tools)  
-**Exit Target:** $300-400K revenue (Strukt&Proto insurance + income)  
+**Company:** GoFlight.ai — charter operations platform for mid-size US operators (10–30 aircraft)  
+**Stage:** Pre-revenue, thesis locked, design partner pursuit active  
+**Burn Rate:** ~$500–700/mo (AWS ~$350, GitHub $8, M365 $30, Hetzner TBD)  
+**Runway:** ~12 months at current burn (day job funds operations)  
+**Business Model:** Usage-based pricing to operators and brokers. Pricing unit and tier structure under active discussion — will be tested with first design partner before finalization. Break-even economics acceptable Year 1; goal is proof-of-traction and data foundation, not margin.  
+**Capital Strategy:** Not raising venture capital. Considering angel capital in 60–90 days if design partner signed and memo tested externally. Company run to preserve bootstrapping optionality.
 
-**Owner:** Jack Bradham (solo GTM after Adam's departure)  
-**Co-Founder Status:** Adam Hensley departing; minimal contribution to date
+**Founder:** Jack Bradham — sole founder, 100% owner  
+**Corporate Entity:** Delaware C-Corp, 100% owned by Jack Bradham  
+**Advisors:** Murat (formal advisor, being onboarded), Lazo Qaradaxi (industry advisor, no equity), Aaron Fiser (industry sounding board, not a buyer)
+
+---
+
+## THE THESIS
+
+**Elevator:**
+> *Don't buy software. Flyn does the busywork. You help customers, fly planes, and make deposits.*
+
+**Executive:**
+> *Flyn will increase revenue and elevate the experience of everyone in your operations by taking care of the busywork — chasing vendors, propagating changes, tracking trips — freeing your team to focus on customer experience and booking deposits.*
+
+**What GoFlight IS:** A charter operations platform for 10-to-30-aircraft US owner-operators who run their own booking, manage their own trips, and are drowning in coordination work their existing tools can't do.
+
+**What GoFlight IS NOT:** A marketplace, a quoting engine, or an Avinode replacement. GoFlight lives in the workflow that happens *after* the quote is accepted.
+
+**The agent is named Flyn.** Flyn is an always-on teammate that absorbs coordination work: chasing vendors, tracking trips, propagating changes, collecting documents, flagging what's missing. Flyn doesn't replace the dispatcher's relationships or the owner's judgment. Flyn takes the time back.
+
+---
+
+## WHY THE CATEGORY IS BROKEN
+
+The tools exist. Avinode, FL3XX, and the enterprise platforms do quoting, fleet visibility, and compliance reporting well. What they don't do is the coordination work itself. Their seat-license pricing is also out of reach for most broker-operators.
+
+The dispatcher still chases the caterer manually. The owner-operator still updates the FBO by text. The trip state still lives in her head, a spreadsheet, and a WhatsApp thread with the crew. The category spent a decade building control panels for a job that needed a colleague. A dashboard can show you the work. It cannot do it. Until recently, that was true of any software.
 
 ---
 
 ## PRODUCT STATUS
 
-### Live Features
+### Live Platform
 - Operator onboarding wizard
 - Trust score system (history 30%, response 30%, completion 40%; new operators default 0.5)
 - Chat/messaging core
-- Wingman AI assistant (basic)
+- Flyn AI assistant (basic — formerly Wingman, renamed to Flyn)
 - Operator vetting Lambda microservice
 - Mobile-responsive UI
 - ARGUS/Wyvern safety badges + Part 135 compliance display
+- Stripe payments live
 
-### NOT BUILT (Critical Gap)
-1. **Wingman Features (5 specs drafted, 0 built)**
-   - W-003b: Anonymous Wingman
-   - W-003c: Confirmation flow
-   - W-006: Omnichannel
-   - W-007: Channel switching
-   - W-008: Wingman-first landing
-2. **Wingman session history** (P1 priority)
-3. **Live deals carousel** in Wingman panel
-4. **Conversation carousels** in Wingman panel
-5. **Pricing engine** (CRITICAL: Tivoli launches May 2026)
-6. **Empty legs module** (speed to market advantage)
-7. **Cargo module** (identified as top revenue source)
+### Critical Build Path (Pre-Design-Partner)
+1. **Flyn coordination features** — vendor follow-up, change propagation, trip tracking, document collection
+2. **Demo path** — narrow slice of owner-operator operations flow showable on an iPad at a bar
+3. **Anonymous Flyn conversations** (allow unregistered users to interact)
+4. **Confirmation flow** (verify booking details before submission)
+5. **Session history** for Flyn interactions
+
+### Feature Freeze
+New feature work is frozen through May 18. All effort concentrated on paring existing platform to the owner-operator demo path.
 
 ### Known Bugs (Pre-Launch)
 - Chat scrolling issues
@@ -48,16 +70,9 @@
 - User management errors
 - Operator approvals API failures (intermittent)
 
-### Missing Documentation
-- SPEC.md outdated (cancellation tiers, AI moderation logic, operator vetting incomplete)
-- Pricing rules undefined
-- Cargo integration path undefined
-- Empty legs matching algorithm undefined
-
 ### Testing Status
-- 10 items in testing queue
-- **CRITICAL:** No end-to-end user test completed (1 real person booking via Wingman = success criterion)
-- No real operator or customer validation
+- **CRITICAL:** No end-to-end user test completed
+- Success criterion: 1 real person completes a booking via Flyn with a real or test operator
 - No load testing at scale
 
 ---
@@ -72,260 +87,221 @@
 - **CI/CD:** GitHub Actions → straight-to-main (no PRs, no feature branches)
 - **Deployment:** CloudFront + S3 (frontend); Lambda (backend)
 - **Infrastructure:** Hetzner CPX31 (16GB RAM, 4GB swap) for supporting services
-- **Agents:** All crons on Gemma4 (free/local); zero Anthropic spend on automation
+- **AI:** Model-agnostic — DeepSeek V3, GPT-4.1, Gemini 2.5, Claude (always best + cheapest); crons on Gemma4 (zero Anthropic spend on automation)
 
 ### Current Issues
-1. **Pipeline DOWN** (Apr 7) — blocks Gremlin QA, Audit spec compliance, task verification
-2. **Per-service API Gateway** instead of unified endpoint (scalability debt)
-3. **Agent infrastructure fragile** — scope too large, unclear role boundaries
-4. **SPEC.md scope bloated** — needs full rewrite for current reality
-
-### Nerd Board
-- `nerds.struktproto.com` — Task Board + Factory Output (live)
-- API Gateway: nmv5m59txi
-- Lambda: nerd-board-api
-- S3: nerds-struktproto
-- CloudFront: EOCRVREOKTJFB
-- Task DB CLI: `python3 ~/.openclaw/skills/dev-workflow/scripts/task-db.py`
-- State machine: TODO → IN_PROGRESS → TESTING → VERIFIED → DONE (enforced)
+1. **Per-service API Gateway** instead of unified endpoint (scalability debt)
+2. **SPEC.md scope bloated** — needs full rewrite for current reality (cancellation tiers, AI moderation logic, operator vetting incomplete)
+3. **Pricing rules undefined** — will be tested with design partner
+4. **Documentation gaps** — cargo integration, empty legs matching, payment flow all undefined
 
 ---
 
 ## COMPETITIVE LANDSCAPE
 
-### Direct Competitors
+Three groups matter. None is fatal; together they define where GoFlight plays.
 
-**Hamilton AI**
-- Raised: $10M
-- Status: Live, auto-quote engine active
-- Strength: Speed-to-quote, $10M runway
-- Weakness: Email-only workflow
-- Founder: Wouter Witvoet (wouter@hamilton.ai, 302-563-3823)
+### Avinode and the Quoting Marketplaces (COMPLEMENTARY)
+- Entrenched, profitable, 20+ year incumbent (owned by CAMP Systems)
+- ~3,400+ aircraft, seat-license pricing (~$1,500+/month starter tier)
+- Moat: operator inventory and network relationships
+- **GoFlight's relationship:** Complementary, not competitive. Operators continue using Avinode for sourcing; GoFlight lives in the workflow after the quote is accepted.
 
-**Tivoli**
-- Raised: ~$50M (est)
-- Status: Growing; 4K operators, 3M txns/yr
-- Strength: Operator scale, established relationships
-- Weakness: Email-centric (like Hamilton), operator→broker flow (not direct)
-- Launch: AI pricing engine May 2026 (CRITICAL TIMELINE)
+### Hamilton AI (CLOSEST PEER)
+- Raised: ~$9.8M (seed $7.5M Mar 2026 + pre-seed)
+- Status: Shipping since 2024, embedded banking (Column partnership Apr 2026)
+- Intake: email, WhatsApp, Avinode, Airmail — NO voice
+- **Prediction:** VC-scale economics will concentrate Hamilton on enterprise operators (50+ aircraft). Mid-market 10-30 is harder to serve profitably at their cost structure. That's where GoFlight starts.
+- **GoFlight's edge:** Voice AI (live at +1 305-363-1121), model-agnostic stack, $20/mo self-serve vs. enterprise sales cycle, SMB focus
 
-**Others (Mature/Struggling)**
-- Avinode: B2B only, no direct-to-consumer
-- XO/Vista: Expensive membership model
-- FlyHouse: Reverse auction app model
-- Villiers: Broker-only
-- Wheels Up: Struggling
-
-### Your Edge
-1. Speed to market (if pipeline fixed)
-2. AI UX (Wingman positioning as demand intelligence, not calendar mgmt)
-3. Operator economics (3% flat fee, no hidden markups)
-4. Transparency (3% breakdown, no monthly fees)
-5. Direct operator-to-passenger (no broker middleman)
-
-### Window
-- **6 weeks** before Tivoli prices (May 2026)
-- **6 months** before Hamilton scales deeper
-- **6 months** to prove operator model works
-
----
-
-## GO-TO-MARKET STATUS
-
-### Framework (Planned, Not Executed)
-1. Operator acquisition
-2. Demand generation (content, SEO)
-3. Scaling
-
-### Warm Operator Contacts (Actionable)
-
-**Bryce Cannon (Vantage Air)**
-- Status: Pinged Mar 22, took 12 days to respond
-- Email: Bcanon@vantageair.com
-- Next: Confirm conversion timeline or pivot to Lazo
-
-**Lazo Qaradaxi**
-- Status: High-priority warm lead from NBAA Cleveland (Mar 24-26)
-- Next: First call by Apr 15 (if Bryce stalls)
-
-**Jacob (Switzerland)**
-- Status: Warm but unverified
-- Next: Follow-up outreach
-
-**Bill McBane**
-- Status: Potential introduction source for FBO network
-- Next: Ask for 3-5 FBO operator intros
-
-### FBO Distribution Channel
-- Massive FBO presence at NBAA SDC Cleveland confirmed
-- 20 operator outreach list with pitch angles drafted
-- Strategy: Collect operator names, warm intros via FBOs
-
-### Trade Shows
-- ✅ NBAA SDC Cleveland (Mar 24-26) — attended, pitch NOT market-ready
-- 🎯 NBAA-BACE October 2026 — target (25K attendees, critical for scaling)
-- 🔮 SDC Fort Lauderdale Feb 2027 — backup
-
-### Messaging (Locked)
-- **Core:** "Tell us what you need. We handle the rest."
-- **Subline:** "We're making charter aviation much easier. One conversation at a time."
-- **What You DON'T Sell:** AI, cheap flights, or technology
-- **What You DO Sell:** Fair pricing, transparency, ease, operator liberation
-- **Voice:** Direct, punchy, human, confident (not arrogant), playful. No jargon ("leverage," "optimize").
-- **Feel:** Warm, honest, easy, approachable, reliable, disruptive
-
-### Positioning Strategies Explored
-1. **Redline Agency:** "Prosecution → Evidence → Verdict → Action" (justice against industry)
-2. **Groundswell Creative:** "Operator Pain → Operator Liberation → Passenger Benefit"
-3. **Passenger Zero:** "Curiosity → Demystification → Permission → Action" (private aviation for first-timers)
-4. **Disruption Collective:** Radical transparency, anti-broker movement
-5. **Quietude:** "Private aviation without the performance" (desire-based, exclusive positioning)
-
-**Assessment:** Strategies drafted but not tested. Founder pitch at NBAA Cleveland wasn't market-ready.
+### Enterprise Charter Management (FL3XX, Portside, similar)
+- Powerful, expensive, configured for operators with dedicated IT
+- Sell dashboards, not colleagues
+- Their buyers tend to be larger than GoFlight's beachhead
+- GoFlight's buyers look at these tools, balk at price and complexity, return to WhatsApp
 
 ---
 
 ## TARGET CUSTOMERS
 
-**Primary Segments:**
-1. HNW individuals (high-net-worth charter buyers)
-2. Corporate travel managers
-3. Family groups
-4. Part 135 operators (1-20 aircraft)
+### Beachhead (First 90 Days)
+US owner-operators running 10–30 aircraft who do their own charter booking in-house. Both sides of the transaction (inventory + demand) in the same building. Fastest feedback loops, single decision-maker, highest concentration of the pain GoFlight solves.
 
-**Customer Acquisition:**
-- Direct: Bryce Cannon (test case)
-- Channel: FBOs (20+ operator outreach list)
-- Trade shows: NBAA-BACE (Oct 2026)
+**Market size:** ~3,000–4,000 Part 135 certificate holders operating ~11,000+ aircraft nationally. Beachhead is the 10–30 aircraft mid-market within this population.
 
-**Success Criterion:** One person successfully books a flight end-to-end through Wingman (with a real or test operator) by May 31, 2026.
+### Expansion (Months 4–12)
+Independent charter brokers who work with those operators. Same logistical pain, come in through existing operator relationships (no cold acquisition).
+
+### Not a Target (Yet)
+Enterprise operators with 50+ aircraft and dedicated IT teams. Their procurement cycles, integration demands, and security reviews are not a fit for GoFlight's stage.
+
+---
+
+## GO-TO-MARKET STATUS
+
+### Strategy: Design Partner First
+The primary GTM motion for the next 30–60 days is signing one design partner — an owner-operator in the 10–30 aircraft range willing to use an early version of the tool, give weekly feedback, and be quoted publicly when happy. Everything else (events, content, scaling) comes after.
+
+### Warm Contacts
+
+**Aaron Fiser**
+- Status: Industry sounding board, not a buyer
+- Role: Discovery call target, ICP/messaging input
+- Next: Structured call, recorded, synthesized
+
+**Lazo Qaradaxi**
+- Status: Industry advisor (no equity), warm lead from NBAA Cleveland (Mar 24–26)
+- Next: Re-engagement for operator introductions
+
+**Bryce Cannon (Vantage Air)**
+- Status: Pinged Mar 22, slow response
+- Email: Bcanon@vantageair.com
+- Next: Re-engage or deprioritize
+
+**Bill McBane**
+- Status: Potential introduction source for FBO network
+- Next: Ask for 3–5 FBO operator intros
+
+### Trade Shows
+- NBAA SDC Cleveland (Mar 24–26) — attended, pitch was NOT market-ready
+- NBAA White Plains (May 20) — **CONDITIONAL:** attend only if design partner closable in person or marketing-ready artifact exists
+- NBAA-BACE October 2026 — target (25K attendees, critical for scaling)
+
+### Messaging (Locked)
+- **Core:** "Tell us what you need. We handle the rest."
+- **Subline:** "We're making charter aviation much easier. One conversation at a time."
+- **What You DON'T Sell:** AI, cheap flights, or technology
+- **What You DO Sell:** Time back, coordination relief, operator liberation
+- **Voice:** Direct, punchy, human, confident (not arrogant), playful. No jargon.
+- **Feel:** Warm, honest, easy, approachable, reliable, disruptive
+
+---
+
+## PHASE PLAN
+
+### Phase 1 (Now — Months 0–9): Operations Platform for Owner-Operators
+Win the daily workflow of 10–30 aircraft US operators. Earn the right to be their system of record. All product and GTM effort concentrated here.
+
+### Phase 2 (Months 9–18): Expansion into Brokers
+Same platform opens brokered workflow to independent charter brokers. Come in through operator relationships. Product surface expands modestly; GTM expands meaningfully.
+
+### Phase 3 (18+ Months): Transparent Marketplace Built on Operations Data
+Completed trip data flowing through GoFlight becomes structurally richer than any quoting marketplace has ever had. That data unlocks a customer-facing front door, transparent pricing, and a marketplace that competes on truth. The marketplace is earned by the operations layer, not built in parallel to it.
+
+---
+
+## NEXT 30 DAYS (By May 18, 2026)
+
+1. **One-sentence pitch refined in public** — said out loud 20+ times, iterated from real reactions
+2. **Three discovery calls completed** with owner-operators in the 10–30 aircraft range (including Aaron Fiser). Structured, recorded, synthesized into ICP and messaging.
+3. **One design partner signed** (handshake) — using early tool starting in June, willing to give weekly feedback, willing to be quoted publicly
+4. **Demo path built and shipping** — narrow slice of owner-operator ops flow showable on an iPad at a bar
+5. **Revenue model documented** — pricing unit, target price point, first-year unit economics on napkin math
+6. **One advisor formalized** (Murat) and one founder peer community joined
+7. **Updated external-ready strategy memo** with design partner named
+8. **NBAA White Plains decision** (May 20): attend only if design partner closable in person
 
 ---
 
 ## CRITICAL DECISIONS NEEDED
 
-### By April 15
-1. **Bryce Cannon Status** — Converting or stalling? If stalling, move to Lazo immediately.
-2. **Pipeline Fix ETA** — When is it live? (This blocks everything: QA, Audit, task verification)
-3. **Pricing Feature** — Build in-house or partner? (Tivoli pricing May 2026; you're 6 weeks behind)
-
-### By April 30
-1. **Empty Legs Feature** — Spec, design, queue for build
-2. **Cargo Module** — Initial spec (identified as top revenue source)
-3. **SPEC.md Rewrite** — Cancellation tiers, AI moderation, operator vetting logic
-4. **Adam Transition Plan** — Who owns operator acquisition now? (You? Hire? Defer 90 days?)
+### By May 18
+1. **Design partner commitment** — Who is it? Signed or not?
+2. **Pricing unit decision** — What's the pricing unit for usage-based model? Tested with partner?
+3. **NBAA White Plains** — Go or no-go?
+4. **Demo path scope** — What's the minimum slice that tells the story on an iPad?
 
 ### By June 30
-1. **NBAA-BACE Strategy** — Booth? Speaking slot? Demo-ready product?
-2. **First Operator Onboarded** — Bryce or Lazo must be live and taking bookings
-3. **Pricing Engine Live** — Competitive with or ahead of Tivoli (May launch)
-4. **End-to-End User Test** — 1 person books a flight via Wingman successfully
+1. **Design partner actively using product** — Weekly feedback loop running
+2. **End-to-end user test** — 1 person completes booking via Flyn
+3. **Revenue model validated** — Pricing unit tested, unit economics documented
+4. **Angel capital decision** — Raise or continue bootstrapping?
 
-### By Q1 2027
-1. **$300K Revenue or Pivot Decision** — Extend runway or shift to SaaS model (30-40% higher success probability)
+### By October 2026
+1. **NBAA-BACE strategy** — Booth? Speaking slot? Demo-ready product?
+2. **Multiple operators onboarded** — Booking volume trending
+3. **Broker expansion readiness** — Phase 2 product surface scoped
 
 ---
 
-## PRIORITY BACKLOG (For Dev)
+## FOUNDER
 
-### P0 (Blocking)
-1. **Fix Pipeline** — Gremlin QA, Audit, task verification (by Apr 30)
-2. **Pricing Engine** — Spec, build, test (by May 31, before Tivoli)
-3. **End-to-End User Flow Test** — 1 real booking (by May 31)
+**Jack Bradham** — sole founder, 100% owner, Delaware C-Corp.
 
-### P1 (Critical)
-1. **Wingman Session History** (W-003 subfeature)
-2. **W-003b: Anonymous Wingman** (allow anonymous conversations)
-3. **W-003c: Confirmation Flow** (verify booking details before submission)
-4. **Empty Legs Module** — Spec + MVP (speed advantage)
-5. **Cargo Module** — Initial spec (revenue potential)
-6. **SPEC.md Rewrite** — Cancellation tiers, AI moderation, vetting logic
+Senior Solutions Architect at Amazon Web Services (third year), with prior time at Microsoft and Google Cloud — roughly 15 years across the three major cloud providers. Specialties: GenAI, cloud architecture, data analytics. Day job pays the bills and subsidizes the current stage of GoFlight — no personal savings burn, no pressure to raise before ready.
 
-### P2 (Nice-to-Have)
-1. W-006, W-007, W-008 (Omnichannel, channel switching, Wingman-first landing)
-2. Live deals carousel
-3. Conversation carousels in Wingman panel
-4. Mobile app (if demand signals warrant)
+Deep in the Anthropic developer ecosystem: runs his own AI gateway and a production agentic coding workflow. Technical credibility to build agent-native software is present. The work of the next 90 days is primarily customer discovery, positioning discipline, and organizing around one lane.
 
-### Known Bugs to Fix
-1. Chat scrolling (affects UX)
-2. Notification dropping (silent failures)
-3. User management errors (operator admin workflows broken)
-4. Operator approvals API (intermittent failures)
+**Team need:** One formal advisor (Murat, in progress), a founder peer community, and in 45–60 days fractional GTM help or an aviation-industry seller on aggressive commission.
 
 ---
 
 ## RUNWAY & FINANCIAL CONSTRAINTS
 
-**Monthly Burn:** $500-700  
+**Monthly Burn:** $500–700  
 **Runway:** ~12 months (assumes no hiring, no infrastructure scaling)  
-**Anthropic API:** Pay-as-you-go (crons on Gemma4; zero cost)  
+**AI Costs:** Pay-as-you-go; crons on Gemma4 (zero Anthropic cost)  
 **AWS:** ~$350/mo (compute, storage, data transfer)
 
-**Revenue Timeline:**
-- **0 months (now):** $0
+**Timeline:**
+- **Now:** $0 revenue
 - **6 months (Oct 2026):** Must have 1+ operators live, booking volume trending
-- **12 months (Apr 2027):** $300-400K revenue or runway expires
+- **12 months (Apr 2027):** Meaningful traction or reassess
 
 ---
 
 ## KNOWN UNKNOWNS
 
-1. **Hetzner Cost** — Needed for exact burn rate calculation
-2. **Operator Vetting Logic** — Trust score formula; how many operators can you onboard in parallel?
-3. **Cancellation Tiers** — What happens if operator cancels? Refund policy unclear.
-4. **AI Moderation** — Who flags unsafe flights? What are the rules?
-5. **Pricing Rules** — How do operators set base rates? Dynamic pricing? Margins?
-6. **Empty Legs Matching** — How do you match empty legs to passengers? Algorithm undefined.
-7. **Cargo Integration** — How do cargo requests flow into Wingman? Separate workflow?
-8. **Payment Flow** — Wire/ACH integration for operator payouts? Current implementation?
-
----
-
-## RECENT INTEL FROM NBAA SDC CLEVELAND (Mar 24-26)
-
-- **Hamilton AI in person:** Auto-quote live, $10M raised, email-first workflow
-- **Tivoli rep:** Pricing engine launching May 2026, ~4K operators global
-- **FBO landscape:** Massive presence; potential distribution channel for operator sourcing
-- **Competitive takeaway:** Email-centric workflows are Hamilton & Tivoli's weakness. Your Wingman advantage if executed well.
+1. **Hetzner cost** — Needed for exact burn rate calculation
+2. **Pricing unit** — Usage-based, but what unit? Per trip? Per seat? Per action? Testing with design partner.
+3. **Operator vetting logic** — Trust score formula; parallel onboarding capacity?
+4. **Cancellation tiers** — Refund policy for operator/customer cancellation undefined
+5. **AI moderation** — Rules for flagging unsafe flights undefined
+6. **Empty legs matching** — Algorithm undefined (Phase 2+ feature)
+7. **Cargo integration** — Separate workflow path undefined (Phase 2+ feature)
+8. **Payment flow** — Wire/ACH integration for operator payouts beyond Stripe cards
 
 ---
 
 ## KEY CONTACTS
 
 **Business:**
-- Jack Bradham: jack@goflight.ai (M365), jackb@live.com (Outlook)
+- Jack Bradham: jack@goflight.ai (M365), jackb@live.com (Outlook), hello@goflight.ai (general)
+- Murat: formal advisor (being onboarded)
+- Lazo Qaradaxi: industry advisor, no equity (NBAA Cleveland lead)
+- Aaron Fiser: industry sounding board (discovery call target)
 - Bryce Cannon (Vantage Air): Bcanon@vantageair.com
-- Lazo Qaradaxi (NBAA Cleveland lead): [Contact TBD]
-- Bill McBane (FBO intro source): [Contact TBD]
-- Jacob (Switzerland operator): [Contact TBD]
+- Bill McBane: FBO intro source
 
 **Competitors:**
-- Hamilton AI: Wouter Witvoet (wouter@hamilton.ai, 302-563-3823)
-- Tivoli: [Pricing launch May 2026]
+- Hamilton AI: Wouter Witvoet (wouter@hamilton.ai, 302-563-3823) — $9.8M raised
+- Avinode: incumbent, complementary (not direct competitor)
+- FL3XX / Portside: enterprise tools, not our segment
 
-**CPA (Taxes/Financials):**
+**CPA:**
 - Kermit Bolick (Huggins CPA): kkbolick@hugginscpa.com
 
 ---
 
 ## REFERENCE DOCS
 
-- **SPEC.md:** GoFlight/SPEC.md (needs rewrite for clarity)
-- **CLAUDE.md:** GoFlight/CLAUDE.md (project-wide AI context)
-- **Task Board:** https://nerds.struktproto.com (Task Board + Factory Output tabs)
-- **Operating Plan:** https://nerds.struktproto.com/share/operating-plan.html
-- **Business Review:** https://nerds.struktproto.com/share/business-review.html
+- **Strategy Memo v3:** GoFlight_Strategy_Memo_v3.docx (canonical positioning document)
+- **Pitch Deck v3:** GoFlight_Pitch_Deck_v3.pptx (12 slides, matches strategy memo)
+- **Investor Site:** GoFlight_Investor_Site.html (password-gated, matches v3 positioning)
+- **Business Plan:** GoFlight_Business_Plan.docx (updated to reflect v3 pivot)
+- **Operating Costs:** GoFlight_Operating_Costs.xlsx (needs refresh)
 
 ---
 
 ## THE HONEST TRUTH
 
-GoFlight is infrastructure-advanced but commercially unproven. You have 6 weeks before Tivoli prices (your speed advantage evaporates). You need one operator converting and one end-to-end booking by May 31. The pipeline being down is costing you velocity. Adam's departure means you're solo on GTM — that's either a feature (clarity, speed) or a bug (no division of labor).
+GoFlight is a platform with significant existing infrastructure that is being pared ruthlessly to the owner-operator demo path. The thesis is locked after pressure-testing with Murat and against the competitive landscape. The positioning pivoted meaningfully in April 2026: from marketplace to operations platform, from Wingman to Flyn, from broad charter to 10–30 aircraft owner-operators, from competing with Avinode to complementing it.
 
-**Window:** Oct 2026 NBAA-BACE is your distribution play. Everything between now and then is prep.
+The next 30 days are not primarily technical. They are: customer discovery (3 calls), pitch refinement (20+ reps), design partner signed (1 handshake), and demo path shipping. If those happen by May 18, GoFlight has earned the right to attend White Plains, consider angel capital, and expand.
+
+If they don't, the thesis needs another turn.
 
 ---
 
-**Document updated:** April 10, 2026 22:30 ET  
-**For:** Claude Code sessions, Runway/Pixel/Lander briefings, investor/partner discussions
+**Document updated:** April 22, 2026  
+**For:** Claude Code sessions, project briefings, advisor/partner discussions
