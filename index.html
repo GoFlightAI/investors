@@ -548,92 +548,30 @@
         }
 
         /* ============ RESPONSIVE ============ */
-        /* ============ MOBILE HAMBURGER ============ */
-        .hamburger-btn {
-            display: none;
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 9000;
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 16px rgba(46, 117, 182, 0.4);
-            cursor: pointer;
-            font-size: 24px;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-        }
-        .hamburger-btn:active { transform: scale(0.92); }
-
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            z-index: 9001;
-        }
-        .mobile-menu-overlay.open { display: block; }
-
-        .mobile-menu {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: var(--bg-card);
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-            z-index: 9002;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-            max-height: 70vh;
-            overflow-y: auto;
-            padding: 16px 0 32px;
-        }
-        .mobile-menu.open { transform: translateY(0); }
-
-        .mobile-menu-handle {
-            width: 40px; height: 4px;
-            background: var(--border);
-            border-radius: 2px;
-            margin: 0 auto 16px;
-        }
-
-        .mobile-menu a {
-            display: block;
-            padding: 14px 24px;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.15s;
-        }
-        .mobile-menu a:active,
-        .mobile-menu a.active {
-            color: var(--accent);
-            background: var(--accent-light);
-        }
-
         @media (max-width: 768px) {
-            .app-container {
-                flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-            }
-
             .sidebar {
-                display: none;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                position: static;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             }
 
-            .hamburger-btn {
+            .sidebar-nav {
                 display: flex;
+                gap: 8px;
+                padding: 12px;
+                overflow-x: auto;
+            }
+
+            .nav-item {
+                padding: 8px 12px;
+                white-space: nowrap;
             }
 
             .main-content {
                 margin-left: 0;
-                flex: 1;
             }
 
             .content-wrapper {
@@ -659,23 +597,9 @@
                 grid-template-columns: 1fr;
             }
 
-            .access-gate {
-                align-items: flex-start;
-                overflow-y: auto;
-                padding: 40px 0;
-            }
-
             .gate-card {
-                margin: 0 20px;
+                margin: 20px;
                 padding: 40px 24px;
-            }
-
-            .gate-card h1 {
-                font-size: 24px;
-            }
-
-            [style*="grid-template-columns"] {
-                grid-template-columns: 1fr !important;
             }
         }
     </style>
@@ -717,8 +641,10 @@
                 <a class="nav-item" data-section="founder">Founder</a>
                 <a class="nav-item" data-section="entity">Corporate Entity</a>
                 <a class="nav-item" data-section="timeline">Timeline</a>
+                <a class="nav-item" data-section="status">Status &amp; Support</a>
                 <a class="nav-item" data-section="risks">Risks &amp; Open Questions</a>
                 <a class="nav-item" data-section="events">Events</a>
+                <a class="nav-item" data-section="documents">Documents</a>
                 <a class="nav-item" data-section="contact">Contact</a>
             </nav>
             <div class="sidebar-footer">
@@ -742,21 +668,22 @@
                 <section class="section" id="executive-summary">
                     <h2>Executive Summary</h2>
                     <p>
-                        <strong>GoFlight</strong> is an AI-native private aviation SaaS platform connecting charter passengers, cargo shippers, brokers, and service providers directly with Part 135 operators. Built as a Delaware C-Corp, the platform empowers the entire charter ecosystem with a conversational AI called <strong>Wingman</strong> &mdash; accessible via web, mobile, SMS, WhatsApp, Telegram, voice, and email. GoFlight integrates with existing aviation marketplaces and operator tools, creating one unified interface across a fragmented industry.
+                        <strong>GoFlight</strong> is a charter operations platform for mid-size US operators (10-30 aircraft) who do their own charter booking in-house. We remove the coordination burden — vendor chasing, change propagation, trip tracking, compliance docs — so operators and brokers can focus on customers and flying planes. Built as a Delaware C-Corp, the platform is powered by <strong>Flyn</strong>, an AI agent that handles all the busywork behind the scenes, accessible via web, mobile, SMS, WhatsApp, email, and voice.
                     </p>
-                    <p><strong>Stage:</strong> Pre-revenue, demo ready, seeking first operator</p>
-                    <p><strong>Primary goal:</strong> Sign 10 active operators and complete 3 real bookings by June 2026</p>
-                    <p><strong>Founder:</strong> Jack Bradham, Key West, FL</p>
+                    <p><strong>Elevator pitch:</strong> "Don't buy software. Flyn does the busywork. You help customers, fly planes, and make deposits."</p>
+                    <p><strong>Stage:</strong> Pre-revenue, core platform live, seeking first design partner</p>
+                    <p><strong>Primary goal:</strong> Sign 1 design partner by June 2026, prove 4+ hours/week of freed-up time, use insights to shape Phase 2 GTM</p>
+                    <p><strong>Founder:</strong> Jack Bradham (15+ years cloud platforms, decade in aviation), self-funded, day job at AWS subsidizes development</p>
                 </section>
 
                 <!-- TIMELINE -->
                 <section class="section" id="timeline">
                     <h2>Timeline</h2>
-                    <h3 style="margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Strukt &amp; Proto Era — Design &amp; First Trials</h3>
+                    <h3 style="margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">Early Development</h3>
                     <div class="timeline">
                         <div class="timeline-item">
                             <div class="timeline-date">Mid-2025</div>
-                            <div class="timeline-content">Initial GoFlight concept designed and built at Strukt &amp; Proto. First designs, prototypes, and technical trials begin</div>
+                            <div class="timeline-content">Initial GoFlight concept. First designs, prototypes, and technical trials begin</div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-date">Late 2025</div>
@@ -764,15 +691,15 @@
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-date">Early 2026</div>
-                            <div class="timeline-content">Formal launch planning begins. Platform taking shape under Strukt &amp; Proto's design and engineering resources</div>
+                            <div class="timeline-content">Formal launch planning begins. Platform taking shape</div>
                         </div>
                     </div>
 
-                    <h3 style="margin-top: 32px; margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">GoFlight Spin-Off — Independent C-Corp</h3>
+                    <h3 style="margin-top: 32px; margin-bottom: 12px; color: var(--text-muted); font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em;">GoFlight &mdash; Delaware C-Corp</h3>
                     <div class="timeline">
                         <div class="timeline-item">
-                            <div class="timeline-date">Late Feb 2026</div>
-                            <div class="timeline-content">Decision made to spin GoFlight off as an independent US-based Delaware C-Corp, run by Jack Bradham</div>
+                            <div class="timeline-date">Feb 2026</div>
+                            <div class="timeline-content">GoFlight incorporated as a US-based Delaware C-Corp. Jack Bradham, sole founder and owner</div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-date">Feb 21, 2026</div>
@@ -784,7 +711,7 @@
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-date">Mar 1, 2026</div>
-                            <div class="timeline-content">Omnichannel Wingman: SMS, WhatsApp, Telegram, Voice. Phone line live</div>
+                            <div class="timeline-content">Omnichannel Flyn: SMS, WhatsApp, Telegram, Voice. Phone line live</div>
                         </div>
                         <div class="timeline-item">
                             <div class="timeline-date">Mar 5, 2026</div>
@@ -818,33 +745,30 @@
                     <h2>Mission & Strategy</h2>
 
                     <h3>Positioning</h3>
-                    <p><strong>"Aviation for the rest of us."</strong></p>
-                    <p>Private aviation is broken &mdash; not because the planes aren't there, but because the process is expensive, opaque, and built for insiders. Booking a charter today means cold-calling brokers, waiting for quotes, and paying markups you'll never see. GoFlight exists to change that.</p>
-                    <p>We use AI to make booking a private flight as simple as sending a text. Faster quotes. Better prices. An experience that finally puts the customer first.</p>
-                    <p><strong>Transparency is non-negotiable.</strong> Every customer deserves to understand what they're paying for, what they're getting, and why. GoFlight's composable trip model breaks every charter into its real components &mdash; aircraft, fuel, crew positioning, deadhead, landing fees, FBO costs &mdash; so the price isn't a black box. If something changes, it's documented clearly and the customer sees exactly what shifted and why. No hidden markups. No mystery surcharges. Just an honest price for an honest flight.</p>
+                    <p><strong>"Don't buy software. Flyn does the busywork. You help customers, fly planes, and make deposits."</strong></p>
+                    <p>GoFlight is a <strong>charter operations platform for mid-size US operators</strong> — the 10-to-30-aircraft owner-operators who do their own charter booking in-house. We remove the coordination burden — the endless back-and-forth with vendors, the change propagation across 8 parties, the trip tracking and compliance checks — so your team can focus on customer experience and flying planes.</p>
+                    <p>This is not a marketplace. We are not competing for customer demand; we are embedded in your operations. Your booking process stays the same. Your relationships with customers stay the same. What changes is the busywork disappears.</p>
+                    <p><strong>Phase 3 (18+ months out) will be a transparent marketplace built on the operations data we'll have gathered with design partners. But that is not what we are building now.</strong> Right now, we are building the operations platform that makes every day easier for the people who already run charter booking in-house.</p>
 
                     <h3>Why Now</h3>
-                    <p>Three things have converged: AI has matured enough to power the entire charter workflow. Cloud infrastructure makes it possible to build and operate at a fraction of what it cost even two years ago. And the market is ready &mdash; customers are tired of the old model and operators and brokers want better tools and direct access to demand.</p>
+                    <p><strong>LLMs used to answer questions. Agents now do work.</strong> Two years ago, "AI for charter" meant a chatbot that helped customers ask better questions. Now, Flyn actually executes work — it chases vendors, propagates changes, tracks trips, collects documents. The capability gap has closed.</p>
+                    <p><strong>The incumbent's strength is in the wrong place.</strong> Avinode owns sourcing and quoting. Their 20-year moat is operator inventory and network effects in the pre-quote layer. But the operations layer — the work that happens after a quote is accepted — is completely unoccupied. There is no entrenched player. That is where we start.</p>
+                    <p><strong>Charter is a coordination business, not a quoting business.</strong> The profit margin is in the efficiency of operations, not in being clever with the quote. Show an operator how to save 4 hours a week on vendor chasing, and they will never leave.</p>
 
                     <h3>Go-to-Market</h3>
-                    <p>GoFlight serves the entire Part 135 ecosystem &mdash; not just operators and passengers, but brokers, FBOs, fuel providers, ground transport, catering, and every service provider that touches a charter trip.</p>
-                    <ul>
-                        <li><strong>Strategy:</strong> Operator-first &mdash; sign operators, build the supply side, then bring them customers</li>
-                        <li><strong>Launch market:</strong> US + EU. EBACE Geneva (June 2-4, 2026) is the international launchpad</li>
-                        <li><strong>Target market:</strong> Anyone in the Part 135 ecosystem &mdash; operators, brokers, FBOs, management companies, service providers</li>
-                        <li><strong>Target customer:</strong> Anyone who participates in Part 135 flights and accompanying services</li>
-                    </ul>
-                    <p style="margin-top: 12px;">The composable trip model is what makes this possible. Every trip is built from real components &mdash; aircraft, fuel, crew, ground services, FBO &mdash; which means service providers like American Flight Support, catering companies, and ground transport can all plug into the platform as part of the trip itself. GoFlight becomes the connective layer across the entire charter ecosystem.</p>
+                    <p><strong>Beachhead (now):</strong> US owner-operators running 10-30 aircraft who do their own charter booking in-house. These operators have booking processes but minimal automation. They spend 4-8 hours per day on the busywork — vendor chasing, change coordination, trip tracking, compliance checks. Flyn saves them 4+ hours per week. At that ROI, they stay customers forever.</p>
+                    <p><strong>Expansion (months 4-12):</strong> Independent charter brokers who operate similarly — in-house booking, high manual burden, searching for efficiency gains. Brokers can use Flyn to handle 10x the volume without 10x the staff.</p>
+                    <p><strong>NOT our target (ever):</strong> Enterprise operators with 50+ aircraft and dedicated IT teams. They use FL3XX or Portside. Different business model, different economics, not our beachhead.</p>
+                    <p style="margin-top: 12px;"><strong>Launch vehicle:</strong> NBAA White Plains Regional Forum (May 20, 2026). Direct outreach to known operators in our target segment. No events-first strategy — design partners first, events second.</p>
 
                     <h3>The Platform</h3>
                     <ul>
-                        <li><strong>For customers:</strong> Just say where you're going. Wingman handles the rest.</li>
-                        <li><strong>For operators:</strong> Get booked directly. Transparent pricing. No middleman markup.</li>
-                        <li><strong>For service providers:</strong> Plug into trips as a component. Get discovered by operators and customers who need you.</li>
+                        <li><strong>For operators:</strong> Flyn handles the busywork — chasing vendors, propagating changes, tracking trips, collecting compliance docs. Your team focuses on customers and flying.</li>
+                        <li><strong>For brokers:</strong> Same benefit: 10x the volume, same staff size, no 1099 chaos.</li>
                     </ul>
 
                     <h3>Revenue Model</h3>
-                    <p>A $20/month subscription for all users keeps the platform serious and filters out "tire-kickers." GoFlight will also take a portion of the total trip price &mdash; starting at zero as the network builds, and growing as the platform proves its value to the ecosystem. The first pricing upgrade will be to 1.5%, then 3%.</p>
+                    <p><strong>Usage-based pricing to operators and brokers.</strong> The pricing unit and tier structure are under active discussion and will be tested with the first design partner before being finalized. Break-even economics are acceptable for the first year; the goal at this stage is proof-of-traction and a data foundation, not margin.</p>
                 </section>
 
                 <!-- BUSINESS MODEL -->
@@ -853,9 +777,9 @@
 
                     <h3>Revenue Streams</h3>
                     <ul>
-                        <li><strong>Subscription:</strong> $20/month per user &mdash; filters out tire-kickers and creates a recurring revenue base</li>
-                        <li><strong>Transaction fee:</strong> A portion of total trip price &mdash; starts at zero to build the network, grows as the platform proves its value to the ecosystem</li>
-                        <li><strong>Ecosystem services:</strong> As service providers (FBOs, fuel, ground transport, catering) plug into the composable trip model, each touchpoint becomes a potential revenue layer</li>
+                        <li><strong>Usage-based pricing:</strong> Operators and brokers pay based on active trips and coordination events. Tier structure TBD with first design partner.</li>
+                        <li><strong>Phase 2+ (months 9-18):</strong> As brokers plug in, per-booking transaction fees may apply.</li>
+                        <li><strong>Phase 3+ (18+ months):</strong> Marketplace infrastructure revenue from booking flow (if marketplace is built).</li>
                     </ul>
 
                     <h3>Payment Flow</h3>
@@ -866,62 +790,14 @@
                     <p><strong>Bank Transfer (ACH) &mdash; on the roadmap.</strong> Stripe supports ACH Direct Debit at 0.8%, capped at $5 per transaction. On a $50,000 charter, that's $5 in processing instead of ~$1,250 via credit card. ACH bank transfer will be offered as an alternative payment method for high-value bookings, dramatically improving unit economics for both GoFlight and its customers.</p>
 
                     <h3>Go-to-Market</h3>
-                    <p style="margin-bottom: 12px;"><strong>Phase 1 (Months 1&ndash;6): Industry events and direct outreach.</strong> EBACE Geneva, NBAA-BACE, and regional shows. Every event is a face-to-face onboarding opportunity with operators and brokers. At $20/month, the barrier to try GoFlight is nearly zero &mdash; less than a cup of coffee a day to access an AI-native platform that can save hours on every trip.</p>
-                    <p style="margin-bottom: 12px;"><strong>Phase 2 (Months 7&ndash;12): Network effects.</strong> Every operator who joins makes the platform more valuable for brokers, and vice versa. The Wingman's omnichannel reach &mdash; SMS, WhatsApp, email, voice &mdash; means operators can respond to quotes without changing their workflow. Private aviation is a tight-knit industry; word of mouth travels fast.</p>
-                    <p style="margin-bottom: 16px;"><strong>Phase 3 (Year 2&ndash;3): Ecosystem expansion.</strong> As service providers (FBOs, fuel, ground transport, catering) plug into the composable trip model, GoFlight becomes the connective layer for the entire trip. Each new integration is a distribution channel &mdash; the FBO on GoFlight recommends it to every operator they serve.</p>
+                    <p style="margin-bottom: 12px;"><strong>Phase 1 (Now): Operations platform for owner-operators.</strong> Win the daily workflow of 10-30 aircraft US operators. Direct outreach, design partners, proof-of-traction with first 3-5 paying customers. No venture capital. Self-funded by founder. Focus: show 4+ hours/week of freed-up time per operator.</p>
+                    <p style="margin-bottom: 12px;"><strong>Phase 2 (Months 9&ndash;18): Expansion into brokers.</strong> Leverage operator relationships to reach brokers. Brokers see how their partner operators use Flyn; they realize it solves their staffing problem. Same product, different GTM channel.</p>
+                    <p style="margin-bottom: 16px;"><strong>Phase 3 (18+ months): Transparent marketplace built on operations data.</strong> Once we have 20-30 paying operator-partners and have gathered enough anonymized trip data to see patterns, we can build marketplace infrastructure. Not before.</p>
+                    <p style="margin-bottom: 16px;"><strong>Capital strategy:</strong> We are not raising venture capital at this time. We will consider angel capital in 60-90 days, if and when a design partner is signed.</p>
 
                     <h3>Revenue Projections</h3>
-                    <p style="margin-bottom: 12px; color: #586B7D; font-size: 14px;">Target: <strong>4,000 active subscribers</strong> and <strong>1,000 trips/month</strong> at scale. Average booking: $35,000. Transaction fee starts at 0%, first upgrade to 1.5%, then 3% as the platform matures.</p>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Period</th>
-                                    <th>Subscribers</th>
-                                    <th>Trips/Month</th>
-                                    <th>Take Rate</th>
-                                    <th>Monthly Revenue</th>
-                                    <th>Annual Run-Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Months 1-6</td>
-                                    <td>200</td>
-                                    <td>10</td>
-                                    <td>0%</td>
-                                    <td>$4,000</td>
-                                    <td>$48,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Months 7-12</td>
-                                    <td>800</td>
-                                    <td>80</td>
-                                    <td>1.5%</td>
-                                    <td>$58,000</td>
-                                    <td>$696,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Year 2</td>
-                                    <td>2,000</td>
-                                    <td>400</td>
-                                    <td>1.5%</td>
-                                    <td>$250,000</td>
-                                    <td>$3,000,000</td>
-                                </tr>
-                                <tr style="background: #F0F7FF;">
-                                    <td><strong>Year 3</strong></td>
-                                    <td><strong>4,000</strong></td>
-                                    <td><strong>1,000</strong></td>
-                                    <td><strong>3%</strong></td>
-                                    <td><strong>$1,130,000</strong></td>
-                                    <td><strong>$13,560,000</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p style="margin-top: 8px; font-size: 12px; color: #8898AA;">Year 3 revenue: 4,000 subs &times; $20/mo ($80K) + 1,000 trips &times; $35K &times; 3% ($1.05M) = $1.13M/mo</p>
-                    <p style="margin-top: 12px; color: #586B7D; font-size: 14px;"><strong>Break-even estimate:</strong> ~50 bookings/month at the 1.5% take rate, given GoFlight's low operating costs. The platform does not need massive scale to be self-sustaining.</p>
+                    <p style="margin-bottom: 12px; color: #586B7D; font-size: 14px;">The old pricing model ($20/month per user + 0% to 3% take rate) does not reflect our new strategy. We are moving away from subscription + transaction fees and toward usage-based pricing. The exact unit economics will be determined by the first design partner agreement and will be finalized before any second customer is onboarded.</p>
+                    <p style="color: #586B7D; font-size: 14px;">What we know: GoFlight's infrastructure cost is $462-$520/month even at scale (200 users). The math is simple — if we can charge enough to cover that plus modest sales overhead, we are profitable. And we will move profitably at whatever customer volume we reach, because we are not trying to be a marketplace YET. We are trying to be an embedded operations tool for owner-operators.</p>
 
                     <h3>Current Burn</h3>
                     <ul>
@@ -1019,7 +895,7 @@
                     </div>
 
                     <h4 style="margin-bottom: 12px;">AI Model Costs &mdash; Model-Agnostic by Design</h4>
-                    <p style="margin-bottom: 16px; color: #586B7D; font-size: 14px;">GoFlight is not locked to any single AI provider. Wingman can run on OpenAI, Anthropic, Z.ai (GLM), or open-source models &mdash; swapping based on cost, performance, and task complexity without code changes.</p>
+                    <p style="margin-bottom: 16px; color: #586B7D; font-size: 14px;">GoFlight is not locked to any single AI provider. Flyn can run on OpenAI, Anthropic, Z.ai (GLM), or open-source models &mdash; swapping based on cost, performance, and task complexity without code changes.</p>
 
                     <div style="overflow-x: auto;">
                         <table>
@@ -1105,42 +981,36 @@
                 <section class="section" id="product">
                     <h2>Product</h2>
 
-                    <p style="margin-bottom: 16px; color: #586B7D;">GoFlight is a full SaaS platform &mdash; responsive web app on mobile, tablet, and desktop &mdash; with every channel connected to a single AI called Wingman. Every participant in the charter ecosystem gets the interface they actually use, and every interaction flows through one composable trip model.</p>
+                    <p style="margin-bottom: 16px; color: #586B7D;">GoFlight is an operations platform — responsive web app on mobile, tablet, and desktop — with an AI agent called Flyn embedded in the workflow. Flyn's job: coordinate all the busywork that happens after a quote is accepted. Operators and brokers use their normal interfaces; Flyn does the coordination work silently in the background.</p>
 
-                    <h3>For Customers</h3>
-                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Request a quote however you want &mdash; GoFlight meets you where you are.</p>
+                    <h3>For Operators (Primary User)</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Flyn handles the operations burden. You keep your booking interface and customer relationships.</p>
                     <ul>
-                        <li><strong>Text or WhatsApp Wingman</strong> with where you're going and when &mdash; get back real quotes in seconds</li>
-                        <li><strong>Email a request</strong> to wingman@goflight.ai &mdash; Wingman builds the trip, reaches out to operators, and replies with options</li>
-                        <li><strong>Call Wingman</strong> by phone &mdash; voice-powered AI walks you through the booking conversationally</li>
-                        <li><strong>Use the web/mobile app</strong> for full trip management, payment, and tracking</li>
-                        <li><strong>Full price transparency</strong> &mdash; the composable trip model breaks every charter into real components so you see exactly what you're paying for and why</li>
+                        <li><strong>Vendor coordination:</strong> Flyn chases FBO, fuel, catering, ground transport for you. No more daily follow-up calls.</li>
+                        <li><strong>Change propagation:</strong> A customer modifies their trip. Flyn sees it, updates all 8 vendors, tracks confirmations.</li>
+                        <li><strong>Trip tracking:</strong> Real-time status across all trip components. Flyn flags what's missing before departure.</li>
+                        <li><strong>Compliance doc collection:</strong> Insurance cards, crew credentials, manifest requirements &mdash; Flyn collects it all automatically.</li>
+                        <li><strong>Omnichannel coordination:</strong> Vendors reply via SMS, WhatsApp, email, phone. Flyn understands all of it and updates the trip in real-time.</li>
                     </ul>
 
-                    <h3>For Operators</h3>
-                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Speed wins quotes. Operators can respond on any channel &mdash; seconds matter.</p>
+                    <h3>For Brokers (Phase 2+)</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Brokers can use Flyn to handle the same coordination work across multiple operator relationships at once, multiplying the value of their in-house booking team.</p>
                     <ul>
-                        <li><strong>Real-time bid notifications</strong> via SMS, WhatsApp, email, or dashboard &mdash; respond to quotes instantly from any device</li>
-                        <li><strong>Operator dashboard</strong> for fleet management, bid history, analytics, and passenger flow</li>
-                        <li><strong>Competitive quoting</strong> &mdash; Wingman queries available aircraft across the network and returns price-sorted options to customers</li>
-                        <li><strong>Automated trip assembly</strong> &mdash; deadhead routing, fuel, crew positioning, landing fees computed in real time</li>
-                        <li><strong>Stripe payment processing</strong> with escrow protection (24-72 hour hold)</li>
+                        <li><strong>Multi-operator coordination:</strong> Manage trips across 10+ operator relationships. Flyn handles all the vendor/operator/customer chasing.</li>
+                        <li><strong>Trip assembly at scale:</strong> Brokers can book larger volumes without scaling headcount.</li>
+                        <li><strong>Relationship stacking:</strong> Flyn learns each operator's preferences and vendor list, so every trip gets faster to coordinate.</li>
+                        <li><strong>Booking dashboard:</strong> See all active trips, pending confirmations, vendor delays at a glance.</li>
                     </ul>
 
-                    <h3>For Brokers</h3>
-                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Wingman empowers brokers to handle 10x the volume without 10x the staff.</p>
-                    <ul>
-                        <li><strong>AI-powered quoting</strong> &mdash; Wingman does the legwork of sourcing, pricing, and assembling trips across the operator network</li>
-                        <li><strong>Customer management tools</strong> &mdash; track conversations, trips, preferences, and repeat booking patterns</li>
-                        <li><strong>Transparent pricing documentation</strong> &mdash; every component of the trip is itemized and traceable, building trust with customers</li>
-                    </ul>
+                    <h3>For Customers (Eventually)</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Right now, customers use GoFlight indirectly through operators and brokers who use Flyn for coordination. In Phase 3 (18+ months), if we build a marketplace, customers will see transparent pricing and trip options. But that is not the primary focus yet.</p>
 
-                    <h3>For Service Providers (FBOs, Fuel, Ground, Catering)</h3>
-                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Wingman proactively reaches out to service providers on behalf of the operator or broker.</p>
+                    <h3>For Service Providers (FBOs, Fuel, Ground, Catering) — Phase 2+</h3>
+                    <p style="margin-bottom: 8px; color: #586B7D; font-size: 14px;">Once operators are embedded, service providers integrate with Flyn to streamline how they respond to coordination requests.</p>
                     <ul>
-                        <li><strong>Plug into trips as a component</strong> &mdash; the composable trip model lets FBOs, fuel providers, ground transport, and catering appear as bookable services within any charter</li>
-                        <li><strong>Automated outreach from Wingman</strong> &mdash; when a trip needs ground transport or specific FBO services, Wingman contacts providers directly to coordinate and price</li>
-                        <li><strong>Get discovered</strong> by operators and customers who need your services in your region</li>
+                        <li><strong>Flyn integration:</strong> Receive trip requests from Flyn via their preferred channel (SMS, email, phone), respond however you want.</li>
+                        <li><strong>Pre-built vendor profiles:</strong> Operators can pre-configure their preferred FBO, fuel vendors, catering, ground transport. Flyn knows who to ask and in what order.</li>
+                        <li><strong>Real-time coordination:</strong> You respond to Flyn; Flyn tracks your confirmation and updates the operator and all other vendors.</li>
                     </ul>
 
                     <h3>Platform Capabilities</h3>
@@ -1174,11 +1044,11 @@
                     </div>
 
                     <div class="cta-box">
-                        <h3>Try Wingman</h3>
-                        <p>Experience the AI-native private aviation SaaS platform firsthand</p>
+                        <h3>Try Flyn</h3>
+                        <p>See how Flyn coordinates your operations. Get in touch for a demo.</p>
                         <p>
-                            <strong>Call:</strong> +1 (305) 363-1121<br>
-                            <strong>Email:</strong> wingman@goflight.ai
+                            <strong>Email:</strong> jack@goflight.ai<br>
+                            <strong>Phone:</strong> +1 (305) 363-1121
                         </p>
                     </div>
                 </section>
@@ -1195,52 +1065,20 @@
                     </ul>
 
                     <h3>Competitive Landscape</h3>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Competitor</th>
-                                    <th>Model</th>
-                                    <th>Threat Level</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>Avinode</strong></td>
-                                    <td>B2B SaaS, 1,000+ operators</td>
-                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>XO/Vista</strong></td>
-                                    <td>B2C + fleet, $3B+ parent</td>
-                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Hamilton AI</strong></td>
-                                    <td>AI-first, $10M raised</td>
-                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Tivoli</strong></td>
-                                    <td>~4K operators, AI pricing</td>
-                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>FlyHouse</strong></td>
-                                    <td>Raised $300M</td>
-                                    <td style="color: #D32F2F; font-weight: 600;">HIGH</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <h3>Differentiators</h3>
+                    <p style="margin-bottom: 24px;"><strong>Avinode: Complementary, not a competitor.</strong> Entrenched, profitable, and charging seat-license prices out of reach for most broker-operators. Their moat is operator inventory and a 20-year network. We complement them, not replace them. Our operators can continue to use Avinode for sourcing; we live in the workflow that happens after the quote is accepted. The operations layer they serve is unoccupied by a strong incumbent.</p>
+
+                    <p style="margin-bottom: 24px;"><strong>Hamilton AI: Our closest peer.</strong> Shipping since 2024. Embedded banking infrastructure in April 2026. They're VC-backed and raising aggressively. Our prediction: VC-scale economics will concentrate their attention on enterprise operators — the 50+ aircraft shops. The mid-market 10-30 operator is harder to serve profitably with their cost structure, and that's where we start.</p>
+
+                    <p style="margin-bottom: 24px;"><strong>FL3XX / Portside / Enterprise: Not competition for us.</strong> Powerful, expensive, and configured for operators with dedicated IT. They sell dashboards, not colleagues. Our target segment (10-30 aircraft owner-operators) can't afford or support a $5K/month implementation. We go after the operators these tools leave behind.</p>
+
+                    <h3>Why We Win</h3>
                     <ul>
-                        <li>Operator-first tools (SaaS hybrid model)</li>
-                        <li>Mid-market focus (non-ultra-luxury)</li>
-                        <li>Cargo + passenger support</li>
-                        <li>Hospitality-first UX</li>
-                        <li>AI Wingman as industry infrastructure</li>
+                        <li><strong>We focus on the unoccupied layer.</strong> Avinode owns sourcing; we own operations. No head-to-head fight.</li>
+                        <li><strong>We solve a real pain that costs hours per day.</strong> Vendor chasing, change propagation, trip tracking — this is work that happens on every trip. We eliminate it.</li>
+                        <li><strong>We start with a beachhead that is hard to serve for larger competitors.</strong> 10-30 aircraft operators are too small for Enterprise software vendors, too price-sensitive for Hamilton's VC burn rate.</li>
+                        <li><strong>We have 25-65x structural cost advantage.</strong> Infrastructure cost is $462-$520/month. Competitors are spending $50K+/month on engineering and sales. That gap gets wider, not narrower.</li>
+                        <li><strong>Owner-founder with 15+ years in cloud and a decade in aviation.</strong> We know both the technology and the industry.</li>
                     </ul>
                 </section>
 
@@ -1260,9 +1098,8 @@
 
                             <p style="margin-bottom: 12px;">That experience &mdash; over a decade inside the charter business &mdash; is why GoFlight exists. Jack knows firsthand how broken the broker model is, because he lived inside it.</p>
 
-                            <p style="margin-bottom: 12px;">After the exit, Jack spent nearly <strong>20 years at Microsoft</strong>, rising from technical roles to Sales Director for Emerging Products (Big Data &amp; Analytics), leading a team of 7 across the Eastern US. His enterprise customers included NASCAR, NUCOR, Danaher, and Ingersoll Rand. He earned Microsoft Gold Club and Mentor Gold honors.</p>
+                            <p style="margin-bottom: 12px;">After the exit, Jack spent nearly 15 years across <strong>Microsoft, Google Cloud, and AWS</strong>, rising through technical and sales roles. At Microsoft: Sales Director for Emerging Products (Big Data &amp; Analytics), leading a team of 7 across the Eastern US with enterprise customers including NASCAR, NUCOR, Danaher, and Ingersoll Rand. He earned Microsoft Gold Club and Mentor Gold honors. At Google Cloud: Technologist and GTM Outbound Product Manager for Cloud Spanner. At AWS (third year): Senior Solutions Architect architecting cloud solutions for enterprise customers.</p>
 
-                            <p style="margin-bottom: 12px;">He then moved to <strong>Google</strong> as a Cloud Technologist and GTM Outbound Product Manager for Cloud Spanner (3 years), followed by his current role as <strong>Senior Solutions Architect at AWS</strong> (3.5 years), where he architects cloud solutions for enterprise customers.</p>
 
                             <p style="margin-bottom: 12px;">Jack holds an <strong>MBA in International Business</strong> from the University of South Carolina and a <strong>BS/BA in Computer Information Systems</strong> from Appalachian State University. He holds 9 cloud certifications including AWS Certified Solutions Architect and AWS Certified Data Analytics.</p>
 
@@ -1278,19 +1115,42 @@
                     <h2>Corporate Entity</h2>
                     <div class="card">
                         <h3 style="margin-bottom: 16px;">GoFlight &mdash; Delaware C-Corp</h3>
-                        <p style="margin-bottom: 16px;">GoFlight operates as a Delaware C-Corp. EIN: 41-4338471.</p>
+                        <p style="margin-bottom: 16px;">GoFlight operates as a Delaware C-Corp. EIN: 41-4338471. Founded by Jack Bradham. Sole owner.</p>
                         <div style="background: #F4F5F7; border-radius: 8px; padding: 24px; margin-top: 16px;">
-                            <p style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #8898AA; margin-bottom: 12px;">Parent Organization</p>
-                            <p style="margin-bottom: 12px;">GoFlight was started under <strong>Strukt &amp; Proto</strong>, a US/Netherlands software and AI design firm and investment firm. Strukt + Proto is owned in partnership by Jack Bradham and Adam Hensley, and the <strong>Strukt + Proto Stichting Administratiekantoor</strong> investment group.</p>
-                            <p style="margin-bottom: 12px;">Strukt &amp; Proto provided design, development, and strategic infrastructure from which GoFlight was born. In late February 2026, it was decided that GoFlight would live on its own, run by Jack as sole decision-maker and operator &mdash; leveraging Strukt's software engineering capabilities and cross-Atlantic operational footprint to accelerate GoFlight's build and go-to-market.</p>
-                            <p><strong>Transition to a US Corp homed in Delaware:</strong> This ownership and US-based C-Corp structure allows investors and partners to take ownership of the platform as they work to build it into the vision.</p>
-                            <p style="margin-top: 12px;"><strong>Investment &amp; Equity:</strong> GoFlight is currently self-funded by its owners. Partners who wish to enter equity roles beyond the standard platform relationship will need to provide funding and investment beyond "sweat equity." GoFlight may choose at a later time to run a formal funding round as the platform scales and the opportunity warrants it.</p>
+                            <p style="font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: #8898AA; margin-bottom: 12px;">Ownership &amp; Capital</p>
+                            <p style="margin-bottom: 12px;">GoFlight is 100% owned by Jack Bradham. The company is self-funded through Jack&rsquo;s day job at AWS, which means there is no external pressure to raise before the business is ready. This is intentional: the company is being run to preserve the optionality of bootstrapping.</p>
+                            <p style="margin-bottom: 12px;">We are not raising venture capital at this time. We will consider angel capital in 60&ndash;90 days, if and when a design partner is signed and the thesis has been tested externally.</p>
+                            <p><strong>Advisors:</strong> Murat (formal advisor, being onboarded). Lazo (industry advisor, charter operations). Aaron Fiser (industry sounding board). No equity has been allocated to advisors at this time.</p>
                         </div>
                     </div>
                 </section>
 
                 <!-- TEAM -->
                 
+
+                <!-- STATUS & SUPPORT NEEDS -->
+                <section class="section" id="status">
+                    <h2>Status &amp; Support Needs</h2>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">Current Status</h3>
+                        <ul style="margin-bottom: 16px;">
+                            <li>Solo founder. Core platform built and live on production.</li>
+                            <li>Three warm leads in re-engagement — prospective design partners who understand the value prop.</li>
+                            <li>No cash burn pressure. Day job subsidizes development. Ready to take time to find the right first customer.</li>
+                            <li>Focus: signing first design partner and proving 4+ hours/week of time savings in live operations.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card" style="margin-top: 24px;">
+                        <h3 style="margin-bottom: 16px;">Immediate Support Needs</h3>
+                        <ul>
+                            <li><strong>One formal advisor (Part 135 regulatory expertise).</strong> The compliance landscape for a technology platform is unclear and requires domain expertise. Not a full-time CFO or COO yet — just someone who can guide on regulatory risk and broker relationships.</li>
+                            <li><strong>Founder peer community.</strong> Building alone is isolating. Access to other founders who have gone through the beachhead-to-expansion transition in B2B SaaS would be valuable.</li>
+                            <li><strong>Angel capital (60-90 days).</strong> Once a design partner is signed, we will revisit the decision to raise. A small pre-seed round ($200K-$500K) would accelerate hiring a part-time sales person and formalizing the first advisor relationship. But not before product-market fit signals emerge.</li>
+                        </ul>
+                    </div>
+                </section>
 
                 <!-- RISKS & OPEN QUESTIONS -->
                 <section class="section" id="risks">
@@ -1331,7 +1191,12 @@
                                 <tr>
                                     <td><strong>EBACE Geneva</strong></td>
                                     <td>Jun 2-4, 2026</td>
-                                    <td style="color: var(--accent); font-weight: 600;">PLANNING</td>
+                                    <td style="color: var(--text-muted); font-weight: 600;">CANCELED</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NBAA White Plains Regional Forum</strong></td>
+                                    <td>May 20, 2026</td>
+                                    <td style="color: var(--accent); font-weight: 600;">CONDITIONAL</td>
                                 </tr>
                                 <tr>
                                     <td><strong>NBAA-BACE</strong></td>
@@ -1340,6 +1205,32 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </section>
+
+                <!-- DOCUMENTS -->
+                <section class="section" id="documents">
+                    <h2>Documents</h2>
+                    <p style="margin-bottom: 24px;">Key documents. Updated as the thesis sharpens.</p>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <a href="GoFlight_Strategy_Memo_v3.pdf" target="_blank" style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text-body); transition: border-color 0.2s, box-shadow 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 2px 8px rgba(46,117,182,0.10)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+                            <div style="width: 48px; height: 48px; background: var(--accent-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 15px;">Strategy Memo v3</div>
+                                <div style="font-size: 13px; color: var(--text-muted);">Working draft &mdash; for advisors and potential design partners</div>
+                            </div>
+                        </a>
+                        <a href="GoFlight_Pitch_Deck_v3.pdf" target="_blank" style="display: flex; align-items: center; gap: 16px; padding: 20px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text-body); transition: border-color 0.2s, box-shadow 0.2s;" onmouseover="this.style.borderColor='var(--accent)';this.style.boxShadow='0 2px 8px rgba(46,117,182,0.10)'" onmouseout="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+                            <div style="width: 48px; height: 48px; background: var(--accent-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="24" height="24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--text-primary); font-size: 15px;">Pitch Deck</div>
+                                <div style="font-size: 13px; color: var(--text-muted);">GoFlight pitch deck v3 &mdash; PDF (coming soon)</div>
+                            </div>
+                        </a>
                     </div>
                 </section>
 
@@ -1353,9 +1244,9 @@
                     </p>
 
                     <p>
-                        <strong>Wingman (AI Assistant)</strong><br>
+                        <strong>Flyn (AI Assistant)</strong><br>
                         Phone: +1 (305) 363-1121<br>
-                        Email: wingman@goflight.ai
+                        Email: flyn@goflight.ai
                     </p>
 
                     <p>
@@ -1447,66 +1338,6 @@
         });
 
         checkAuth();
-    </script>
-
-    <!-- Mobile hamburger + slide-up menu -->
-    <button class="hamburger-btn" id="hamburgerBtn">&#9776;</button>
-    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-handle"></div>
-        <a data-section="hero" onclick="navigateToSection('hero')">Home</a>
-        <a data-section="executive-summary" onclick="navigateToSection('executive-summary')">Executive Summary</a>
-        <a data-section="mission" onclick="navigateToSection('mission')">Mission &amp; Strategy</a>
-        <a data-section="business-model" onclick="navigateToSection('business-model')">Business Model</a>
-        <a data-section="product" onclick="navigateToSection('product')">Product</a>
-        <a data-section="market" onclick="navigateToSection('market')">Market &amp; Competition</a>
-        <a data-section="founder" onclick="navigateToSection('founder')">Founder</a>
-        <a data-section="entity" onclick="navigateToSection('entity')">Corporate Entity</a>
-        <a data-section="timeline" onclick="navigateToSection('timeline')">Timeline</a>
-        <a data-section="risks" onclick="navigateToSection('risks')">Risks &amp; Open Questions</a>
-        <a data-section="events" onclick="navigateToSection('events')">Events</a>
-        <a data-section="contact" onclick="navigateToSection('contact')">Contact</a>
-        <div style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px;">
-            <a onclick="document.getElementById('logoutBtn').click(); closeMobileMenu();" style="color: var(--text-muted);">Log Out</a>
-        </div>
-    </div>
-
-    <script>
-        function navigateToSection(id) {
-            const el = document.getElementById(id);
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        // ─── MOBILE HAMBURGER MENU ───
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        function openMobileMenu() {
-            mobileOverlay.classList.add('open');
-            mobileMenu.classList.add('open');
-            hamburgerBtn.innerHTML = '&#10005;';
-        }
-
-        function closeMobileMenu() {
-            mobileOverlay.classList.remove('open');
-            mobileMenu.classList.remove('open');
-            hamburgerBtn.innerHTML = '&#9776;';
-        }
-
-        hamburgerBtn.addEventListener('click', () => {
-            if (mobileMenu.classList.contains('open')) {
-                closeMobileMenu();
-            } else {
-                openMobileMenu();
-            }
-        });
-
-        mobileOverlay.addEventListener('click', closeMobileMenu);
-
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
-        });
     </script>
 </body>
 </html>
